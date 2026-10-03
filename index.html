@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="css/box-iso-og-nav.css">
 <link rel="stylesheet" href="css/field.css">
 <link rel="stylesheet" href="css/responsivt.css">
+<link rel="stylesheet" href="css/toppmeny-og-kilder.css">
 </head>
 <body>
 <div class="topbar"></div>
@@ -1443,6 +1444,75 @@
 <button type="button" class="side-arrow left hidden" id="arrowLeft" onclick="navArrow(-1)" aria-label="Forrige side">◀</button>
 <button type="button" class="side-arrow right hidden" id="arrowRight" onclick="navArrow(1)" aria-label="Neste side">▶</button>
 
+<!-- ===== Toppmeny, språk og HelpCenter-kilder (oktober 2026) ===== -->
+
+<a class="lab-skip" href="#" id="labSkip">Hopp til innholdet</a>
+
+<header id="labBar">
+  <nav id="labCrumbs" aria-label="Du er her">
+    <ol id="labCrumbList"></ol>
+  </nav>
+  <div id="labTools" role="toolbar" aria-label="Verktøy">
+    <button type="button" class="lab-nav" id="labTocBtn" aria-expanded="false" aria-controls="labToc">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 4h11M2.5 8h11M2.5 12h7"/></svg>
+      <span class="lab-lbl">Innhold</span>
+    </button>
+    <button type="button" class="lab-nav lab-hc" id="labHcBtn" aria-expanded="false" aria-controls="labHc">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 3.2c1.9-.6 3.8-.4 5.5.8v9c-1.7-1.2-3.6-1.4-5.5-.8zM13.5 3.2c-1.9-.6-3.8-.4-5.5.8v9c1.7-1.2 3.6-1.4 5.5-.8z"/></svg>
+      <span class="lab-lbl">HelpCenter</span>
+      <span class="lab-count" id="labHcCount" data-n="0">0</span>
+    </button>
+    <button type="button" class="lab-nav" id="labShareBtn">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6.8 9.2a3 3 0 0 0 4.3 0l2-2a3 3 0 0 0-4.3-4.3l-.8.8M9.2 6.8a3 3 0 0 0-4.3 0l-2 2a3 3 0 0 0 4.3 4.3l.8-.8"/></svg>
+      <span class="lab-lbl">Kopier lenke</span>
+    </button>
+    <span class="lab-sep" aria-hidden="true"></span>
+    <div class="lab-lang" role="group" aria-label="Språk">
+      <button type="button" id="labLangNo" lang="nb" aria-pressed="true"><span class="lab-long">Norsk</span><span class="lab-short" aria-hidden="true">NO</span></button>
+      <button type="button" id="labLangEn" lang="en" aria-pressed="false"><span class="lab-long">English</span><span class="lab-short" aria-hidden="true">EN</span></button>
+    </div>
+    <button type="button" class="lab-nav lab-icon" id="labFsBtn" title="Fullskjerm">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg>
+      <span class="lab-sr" id="labFsLbl">Fullskjerm</span>
+    </button>
+  </div>
+</header>
+
+<div class="lab-scrim" id="labScrim" hidden></div>
+
+<aside class="lab-panel left lab-toc" id="labToc" role="dialog" aria-modal="true" aria-labelledby="labTocTitle" hidden>
+  <div class="lab-panel-head">
+    <div><h2 id="labTocTitle">Innhold</h2><p>Hopp direkte til et tema eller et steg.</p></div>
+    <button type="button" class="lab-x" data-lab-close aria-label="Lukk innhold"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+  </div>
+  <div class="lab-panel-body">
+    <button type="button" class="lab-toc-share" id="labShareBtn2"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6.8 9.2a3 3 0 0 0 4.3 0l2-2a3 3 0 0 0-4.3-4.3l-.8.8M9.2 6.8a3 3 0 0 0-4.3 0l-2 2a3 3 0 0 0 4.3 4.3l.8-.8"/></svg>Kopier lenke til denne siden</button>
+    <div id="labTocBody"></div>
+  </div>
+  <div class="lab-panel-foot">
+    <dl class="lab-keys">
+      <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Neste eller forrige steg på siden</dd>
+      <dt><kbd>PgUp</kbd> <kbd>PgDn</kbd></dt><dd>Bla gjennom hele temaet</dd>
+      <dt><kbd>Esc</kbd></dt><dd>Ett nivå opp</dd>
+    </dl>
+  </div>
+</aside>
+
+<aside class="lab-panel right" id="labHc" role="dialog" aria-modal="true" aria-labelledby="labHcTitle" hidden>
+  <div class="lab-panel-head">
+    <div><h2 id="labHcTitle">Les mer i Dalux HelpCenter</h2><p id="labHcSub">Offisiell dokumentasjon for det du ser på nå</p></div>
+    <button type="button" class="lab-x" data-lab-close aria-label="Lukk HelpCenter-panelet"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+  </div>
+  <div class="lab-panel-body"><div class="lab-hc-list" id="labHcList"></div></div>
+  <div class="lab-panel-foot">Presentasjonen forenkler. HelpCenter er den offisielle dokumentasjonen. «Åpne avsnittet» markerer teksten i Chrome, Edge og Safari. Lenkene ble kontrollert 29.09.2026.</div>
+</aside>
+
+
+
+<div id="labLive" class="lab-sr" aria-live="polite" aria-atomic="true"></div>
+<div id="labToast" role="status" hidden></div>
+<!-- ===== slutt toppmeny ===== -->
+
 <script src="js/field.js"></script>
 <script src="js/field-scenarios.js"></script>
 <script src="js/box-samhandling.js"></script>
@@ -1450,5 +1520,7 @@
 <script src="js/brukergrupper.js"></script>
 <script src="js/box-iso.js"></script>
 <script src="js/navigasjon.js"></script>
+<script src="js/engelsk-ordbok.js"></script>
+<script src="js/toppmeny-og-kilder.js"></script>
 </body>
 </html>

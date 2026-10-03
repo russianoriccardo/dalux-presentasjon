@@ -1,0 +1,290 @@
+/* =====================================================================
+   Toppmeny, språk (norsk/engelsk), «Du er her», Innhold, HelpCenter-kilder
+   og tilgjengelighet. Lagt til oktober 2026, se docs/ENDRINGER-2026-10.md.
+   Overstyrer noen regler fra de andre CSS-filene (merket med !important).
+   ===================================================================== */
+:root{
+    /* Onboarding Lab: nøytral grå med litt blått, HelpCenter i blått, Dalux-grønt som før */
+    --muted:#5a6677;                 /* var #718096 (3,7:1). Nå ca. 5,4:1 mot bakgrunnen */
+    --lab-ink:#1f2a37; --lab-muted:#5a6677; --lab-line:#dfe3ea; --lab-surface:#ffffff; --lab-bg:#f5f7fa;
+    --lab-green:#8DC63F; --lab-green-ink:#1d3a08; --lab-green-soft:#eef6e3;
+    --hc:#1f5fd6; --hc-soft:#eef3fd; --hc-line:#c9d8f6; --hc-mark:#fff0a3;
+    --lab-shadow:0 18px 48px rgba(16,24,40,.18),0 2px 6px rgba(16,24,40,.06);
+    --lab-bar-top:calc(var(--topbar-h) + env(safe-area-inset-top,0px));
+  }
+
+  /* ---------- Tilgjengelighet: kontrast på aktive faner (hvit på grønt var 2,1:1) ---------- */
+  .page-btn.active, .comm-tab.on, .hub-tab.on, .fls-pilltg button.on, .fll-chip.on { color:var(--lab-green-ink) !important; }
+  .page-btn.active .pnum, .comm-tab.on .num, .hub-tab.on .num { color:var(--lab-green-ink); }
+
+  /* ---------- Redusert bevegelse ---------- */
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
+  }
+
+  /* ---------- Én felles navigasjon erstatter tilbake- og fullskjermknappene ---------- */
+  .back-btn, .fs-btn { display:none !important; }
+
+  .lab-sr{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
+  .lab-skip{
+    position:fixed; left:12px; top:8px; z-index:5000; transform:translateY(-200%);
+    background:var(--lab-ink); color:#fff; padding:10px 14px; border-radius:8px;
+    font:600 .8rem/1 'DM Sans',sans-serif; text-decoration:none;
+  }
+  .lab-skip:focus{ transform:none; outline:2px solid var(--lab-green); outline-offset:2px; }
+
+  /* ---------- Navigasjonslinje ----------
+     Én fast linje øverst: «Du er her» til venstre, verktøyene til høyre,
+     fullskjerm helt ytterst. Fanene for hvert tema ligger rett under. */
+  :root{ --lab-appbar:56px; }
+  body{ padding-top:var(--lab-appbar) !important; }
+  .topbar{ z-index:1102 !important; }
+  .page-nav{ top:var(--lab-appbar) !important; z-index:1000; }
+  #labBar{
+    position:fixed; top:0; left:0; right:0; z-index:1100;
+    height:calc(var(--lab-appbar) + env(safe-area-inset-top,0px)); padding:env(safe-area-inset-top,0px) 16px 0;
+    display:flex; align-items:center; gap:16px;
+    background:rgba(255,255,255,.96); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--lab-line); box-shadow:0 1px 3px rgba(16,24,40,.05);
+    font:500 .8rem/1.2 'DM Sans',sans-serif; color:var(--lab-ink);
+  }
+  #labCrumbs{ flex:1 1 auto; min-width:0; }
+  #labCrumbs ol{ list-style:none; margin:0; padding:0; display:flex; align-items:center; gap:2px; min-width:0; color:var(--lab-muted); }
+  #labCrumbs li{ display:flex; align-items:center; gap:2px; min-width:0; flex:0 1 auto; }
+  #labCrumbs li + li::before{ content:'›'; color:#a3acb9; padding:0 3px; flex:none; }
+  #labCrumbs a, #labCrumbs li > span{
+    color:var(--lab-muted); text-decoration:none; padding:6px 8px; border-radius:7px; white-space:nowrap;
+    display:inline-flex; align-items:center; gap:6px; min-width:0; overflow:hidden; text-overflow:ellipsis;
+  }
+  #labCrumbs a > span{ overflow:hidden; text-overflow:ellipsis; }
+  #labCrumbs a:hover{ background:var(--lab-bg); color:var(--lab-ink); }
+  #labCrumbs [aria-current]{ color:var(--lab-ink); font-weight:600; }
+  #labCrumbs li:last-child{ flex-shrink:0; max-width:40vw; }
+  #labCrumbs .lab-home{ color:var(--lab-ink); font-weight:600; }
+  #labCrumbs .lab-home b{ font-weight:700; }
+  #labCrumbs .lab-home .lab-mark{ width:20px; height:20px; border-radius:6px; background:var(--lab-green); color:var(--lab-green-ink); display:grid; place-items:center; flex:none; }
+  #labCrumbs .lab-home .lab-mark svg{ width:12px; height:12px; }
+  #labCrumbs .lab-up{ display:none; }
+  #labCrumbs li.lab-up + li::before{ content:none; }
+
+  #labTools{ display:flex; align-items:center; gap:4px; flex:none; }
+  .lab-nav{
+    display:inline-flex; align-items:center; gap:7px; cursor:pointer; position:relative;
+    background:transparent; border:0; border-radius:8px; color:var(--lab-ink);
+    padding:0 11px; height:36px; font:500 .8rem/1 'DM Sans',sans-serif; white-space:nowrap;
+    transition:background .15s, color .15s;
+  }
+  .lab-nav svg{ width:17px; height:17px; flex:none; }
+  .lab-nav:hover{ background:var(--lab-bg); }
+  .lab-nav[aria-expanded="true"]{ background:var(--lab-green-soft); }
+  .lab-nav[aria-expanded="true"]::after{ content:''; position:absolute; left:10px; right:10px; bottom:-10px; height:3px; border-radius:2px; background:var(--lab-green); }
+  .lab-nav.lab-hc{ color:var(--hc); }
+  .lab-nav.lab-hc:hover, .lab-nav.lab-hc[aria-expanded="true"]{ background:var(--hc-soft); }
+  .lab-nav.lab-hc[aria-expanded="true"]::after{ background:var(--hc); }
+  .lab-nav:focus-visible{ outline:2px solid var(--lab-green); outline-offset:1px; }
+  .lab-sep{ width:1px; height:24px; background:var(--lab-line); margin:0 8px; flex:none; }
+  .lab-icon{ width:36px; padding:0; justify-content:center; }
+  .lab-count{
+    min-width:18px; height:18px; padding:0 5px; border-radius:9px; background:var(--hc); color:#fff;
+    font:700 .62rem/18px 'DM Sans',sans-serif; text-align:center;
+  }
+  .lab-count[data-n="0"]{ background:#b8c2d1; }
+  .lab-hc.lab-pulse{ animation:labPulse 1.6s ease 2; }
+  @keyframes labPulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(31,95,214,0);} 40%{ box-shadow:0 0 0 6px rgba(31,95,214,.18);} }
+
+  /* Språkvalg (språkene skrives på sitt eget språk) */
+  .lab-lang{ display:inline-flex; background:var(--lab-bg); border:1px solid var(--lab-line); border-radius:9px; padding:2px; gap:2px; height:34px; }
+  .lab-lang button{ border:0; background:transparent; cursor:pointer; border-radius:7px; padding:0 10px; font:600 .76rem/1 'DM Sans',sans-serif; color:var(--lab-muted); }
+  .lab-lang button[aria-pressed="true"]{ background:var(--lab-surface); color:var(--lab-ink); box-shadow:0 1px 2px rgba(16,24,40,.12); }
+  .lab-lang button:focus-visible{ outline:2px solid var(--lab-green); outline-offset:1px; }
+  .lab-lang .lab-short{ display:none; }
+
+  /* Splash og Box-velgeren starter under linjen */
+  .splash{ padding-top:var(--lab-appbar); }
+  /* Entrepriser var låst til skjermhøyden (100vh, overflow skjult), så listen ble kuttet utenfor fullskjerm */
+  #page1{ height:auto !important; min-height:calc(100vh - var(--lab-appbar)); overflow:visible !important;
+          justify-content:flex-start !important; padding-top:72px !important; padding-bottom:80px !important; }
+  /* Startsiden kan rulles når vinduet er lavere enn innholdet (sentrert når det er plass) */
+  .splash{ align-items:flex-start !important; overflow-y:auto; overscroll-behavior:contain; }
+  .splash-content{ margin:auto; padding-bottom:72px !important; }
+
+  /* Mellomstore skjermer: bare ikoner for Innhold og Kopier lenke */
+  @media (max-width: 1150px){
+    #labTocBtn .lab-lbl, #labShareBtn .lab-lbl{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+    #labTocBtn, #labShareBtn{ width:36px; padding:0; justify-content:center; }
+    .lab-lang .lab-long{ display:none; } .lab-lang .lab-short{ display:inline; }
+    .lab-sep{ margin:0 4px; }
+    #labCrumbs .lab-home > span:not(.lab-mark){ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+  }
+  #labCrumbs li:not(:last-child) > a, #labCrumbs li:not(:last-child) > span{ flex-shrink:0; }
+  /* Samhandling har ingen fanerad: tittelfanene kan ligge høyere nå */
+  #boxTrackComm .page{ padding-top:28px !important; }
+
+  /* ---------- Paneler (Innhold til venstre, HelpCenter til høyre) ---------- */
+  .lab-scrim{ position:fixed; inset:0; z-index:2000; background:rgba(20,28,40,.28); }
+  .lab-scrim[hidden]{ display:none !important; }
+  .lab-panel{
+    position:fixed; top:0; bottom:0; z-index:2001; width:min(380px, calc(100vw - 24px));
+    background:var(--lab-surface); color:var(--lab-ink); box-shadow:var(--lab-shadow);
+    display:flex; flex-direction:column; font:14px/1.5 'DM Sans',sans-serif;
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  .lab-panel[hidden]{ display:none !important; }
+  .lab-panel.left{ left:0; border-right:1px solid var(--lab-line); }
+  .lab-panel.right{ right:0; border-left:1px solid var(--hc-line); width:min(420px, calc(100vw - 24px)); }
+  .lab-panel-head{ display:flex; align-items:flex-start; gap:10px; padding:18px 18px 12px; border-bottom:1px solid var(--lab-line); }
+  .lab-panel.right .lab-panel-head{ background:var(--hc-soft); border-bottom-color:var(--hc-line); }
+  .lab-panel-head h2{ font-size:1.02rem; font-weight:700; margin:0; letter-spacing:-.01em; }
+  .lab-panel-head p{ font-size:.78rem; color:var(--lab-muted); margin:2px 0 0; }
+  .lab-x{
+    margin-left:auto; flex:none; width:34px; height:34px; border-radius:8px; cursor:pointer;
+    border:1px solid var(--lab-line); background:var(--lab-surface); color:var(--lab-ink); display:grid; place-items:center;
+  }
+  .lab-x svg{ width:16px; height:16px; }
+  .lab-panel-body{ overflow-y:auto; padding:14px 18px 18px; flex:1; }
+  .lab-panel-foot{ border-top:1px solid var(--lab-line); padding:12px 18px; font-size:.74rem; color:var(--lab-muted); line-height:1.5; }
+
+  /* Innhold */
+  .lab-toc-next{
+    display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--lab-ink);
+    background:var(--lab-green-soft); border:1px solid #cfe6b1; border-radius:10px; padding:10px 12px; margin-bottom:16px;
+  }
+  .lab-toc-next small{ display:block; font:700 .6rem/1.2 'Space Mono',monospace; text-transform:uppercase; letter-spacing:.08em; color:#4d7a1f; }
+  .lab-toc-next b{ font-weight:600; font-size:.86rem; }
+  .lab-toc-next svg{ margin-left:auto; width:16px; height:16px; }
+  .lab-toc-group{ margin:0 0 16px; }
+  .lab-toc-group > h3{
+    font:700 .62rem/1.2 'Space Mono',monospace; text-transform:uppercase; letter-spacing:.1em; color:var(--lab-muted);
+    margin:0 0 6px; display:flex; align-items:center; gap:8px;
+  }
+  .lab-toc-group ul{ list-style:none; margin:0; padding:0; }
+  .lab-toc-topic > a{ font-weight:600; }
+  .lab-toc a{
+    display:flex; align-items:baseline; gap:8px; color:var(--lab-ink); text-decoration:none;
+    padding:6px 8px; border-radius:7px; font-size:.86rem;
+  }
+  .lab-toc a:hover{ background:var(--lab-bg); }
+  .lab-toc a[aria-current]{ background:var(--lab-green-soft); box-shadow:inset 3px 0 0 var(--lab-green); }
+  .lab-toc .lab-sub{ padding-left:14px; border-left:1px solid var(--lab-line); margin:0 0 4px 12px; }
+  .lab-toc .lab-sub a{ font-size:.82rem; color:#394556; padding:4px 8px; }
+  .lab-toc .lab-n{ font:700 .62rem/1 'Space Mono',monospace; color:var(--lab-muted); min-width:12px; }
+  .lab-tag{
+    font:700 .56rem/1 'Space Mono',monospace; text-transform:uppercase; letter-spacing:.06em;
+    padding:3px 6px; border-radius:5px; margin-left:auto; white-space:nowrap; align-self:center;
+  }
+  .lab-tag.base{ background:#efe8f8; color:#6a4a99; }
+  .lab-tag.wip{ background:#fdf1d8; color:#8a5a00; }
+  .lab-keys{ display:grid; grid-template-columns:auto 1fr; gap:6px 10px; margin:0; font-size:.76rem; }
+  .lab-keys dt{ white-space:nowrap; }
+  .lab-keys dd{ margin:0; color:var(--lab-muted); }
+  kbd{ font:600 .68rem/1 'Space Mono',monospace; background:var(--lab-bg); border:1px solid var(--lab-line); border-bottom-width:2px; border-radius:5px; padding:3px 5px; }
+
+  /* HelpCenter-kort */
+  .lab-hc-list{ display:flex; flex-direction:column; gap:12px; }
+  .lab-hc-card{ border:1px solid var(--lab-line); border-radius:12px; padding:12px 14px; background:var(--lab-surface); }
+  .lab-hc-card.is-now{ border-color:var(--hc); box-shadow:0 0 0 3px var(--hc-soft); }
+  .lab-hc-meta{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; font:700 .6rem/1.3 'Space Mono',monospace; text-transform:uppercase; letter-spacing:.06em; color:var(--lab-muted); margin-bottom:4px; }
+  .lab-hc-step{ background:var(--hc); color:#fff; border-radius:4px; padding:2px 6px; }
+  .lab-hc-card h3{ margin:0 0 4px; font-size:.92rem; font-weight:700; line-height:1.35; }
+  .lab-hc-card h3 a{ color:var(--hc); text-decoration:none; }
+  .lab-hc-card h3 a:hover{ text-decoration:underline; }
+  .lab-hc-why{ margin:0; font-size:.8rem; color:#394556; }
+  .lab-hc-quote{
+    margin:10px 0 0; padding:9px 11px; border-left:3px solid var(--hc); background:var(--hc-soft); border-radius:0 8px 8px 0;
+    font-size:.8rem; line-height:1.55; color:var(--lab-ink);
+  }
+  .lab-hc-quote mark{ background:var(--hc-mark); color:inherit; padding:0 2px; border-radius:2px; }
+  .lab-hc-quote cite{ display:block; font-style:normal; font-size:.7rem; color:var(--lab-muted); margin-top:4px; }
+  .lab-hc-note{ margin:8px 0 0; font-size:.76rem; color:#6a4a99; }
+  .lab-hc-actions{ display:flex; gap:14px; flex-wrap:wrap; margin-top:10px; font-size:.78rem; }
+  .lab-hc-actions a{ color:var(--hc); font-weight:600; text-decoration:none; }
+  .lab-hc-actions a:hover{ text-decoration:underline; }
+  .lab-hc-actions a.lab-en{ color:var(--lab-muted); font-weight:500; }
+
+
+  /* ---------- HelpCenter-henvisninger i teksten ---------- */
+  .lab-ref{
+    color:inherit; cursor:pointer; border-radius:3px;
+    text-decoration:underline dotted var(--hc); text-decoration-thickness:1.5px; text-underline-offset:3px;
+    transition:background .15s, box-shadow .15s;
+  }
+  .lab-ref sup{ font:700 .62em/1 'DM Sans',sans-serif; color:var(--hc); margin-left:2px; vertical-align:.55em; text-decoration:none; display:inline-block; }
+  .lab-ref:hover, .lab-ref.lab-hot{ background:var(--hc-mark); box-shadow:0 0 0 2px var(--hc-mark); }
+  .lab-ref:focus-visible{ outline:2px solid var(--hc); outline-offset:2px; }
+  .lab-hc-num{ background:var(--hc-soft); color:var(--hc); border:1px solid var(--hc-line); border-radius:4px; padding:1px 5px; }
+  .lab-hc-card.lab-flash{ animation:labFlash 1.6s ease; }
+  @keyframes labFlash{ 0%,50%{ box-shadow:0 0 0 4px var(--hc-mark); border-color:#e0c200; } 100%{ box-shadow:none; } }
+  .lab-hc-intext{ font-size:.72rem; color:var(--lab-muted); margin:6px 0 0; }
+  .lab-hc-intext b{ font-weight:600; color:var(--lab-ink); background:var(--hc-mark); padding:0 3px; border-radius:2px; }
+  /* Prototype-merke og dialog */
+  #labBadge{
+    position:fixed; left:16px; bottom:calc(14px + env(safe-area-inset-bottom,0px)); z-index:1101;
+    display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+    background:#fdf1d8; color:#6b4600; border:1px solid #f0d9a4; border-radius:20px;
+    font:600 .7rem/1 'DM Sans',sans-serif; padding:7px 12px; box-shadow:0 1px 3px rgba(0,0,0,.06);
+  }
+  #labBadge i{ width:7px; height:7px; border-radius:50%; background:#d99a0b; }
+  #labAbout{
+    position:fixed; z-index:2001; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:min(560px, calc(100vw - 32px)); max-height:calc(100vh - 48px); overflow:auto;
+    background:var(--lab-surface); color:var(--lab-ink); border-radius:16px; box-shadow:var(--lab-shadow);
+    font:14px/1.55 'DM Sans',sans-serif; padding:22px 24px;
+  }
+  #labAbout[hidden]{ display:none !important; }
+  #labAbout h2{ margin:0 0 4px; font-size:1.15rem; }
+  #labAbout .lab-lead{ color:var(--lab-muted); margin:0 0 14px; font-size:.86rem; }
+  #labAbout h3{ font:700 .62rem/1.2 'Space Mono',monospace; text-transform:uppercase; letter-spacing:.1em; color:var(--lab-muted); margin:16px 0 6px; }
+  #labAbout ul{ margin:0; padding-left:18px; font-size:.86rem; }
+  #labAbout li{ margin:3px 0; }
+  #labAbout a{ color:var(--hc); }
+  #labAbout .lab-x{ position:absolute; right:14px; top:14px; }
+
+  #labToast{
+    position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%); z-index:3000;
+    background:var(--lab-ink); color:#fff; border-radius:10px; padding:10px 14px; font:500 .8rem/1.4 'DM Sans',sans-serif;
+    box-shadow:var(--lab-shadow); max-width:calc(100vw - 32px); display:flex; gap:10px; align-items:center;
+  }
+  #labToast[hidden]{ display:none !important; }
+  #labToast input{ font:500 .74rem 'Space Mono',monospace; width:min(320px, 60vw); padding:5px 7px; border-radius:6px; border:0; }
+
+  [data-lab-focus]:focus{ outline:none; }
+  h1[data-lab-focus]:focus-visible, h2[data-lab-focus]:focus-visible, h3[data-lab-focus]:focus-visible{ outline:none; text-decoration:underline; text-decoration-color:var(--lab-green); text-decoration-thickness:3px; text-underline-offset:6px; }
+  .lab-toc-share{ display:none; align-items:center; gap:10px; width:100%; margin:0 0 10px; padding:10px 12px; border-radius:10px; cursor:pointer;
+    background:var(--lab-bg); color:var(--lab-ink); border:1px solid var(--lab-line); font:600 .82rem/1.3 'DM Sans',sans-serif; text-align:left; }
+  .lab-toc-proto{ display:none; align-items:center; gap:10px; width:100%; margin:0 0 14px; padding:9px 12px; border-radius:10px; cursor:pointer;
+    background:#fdf1d8; color:#6b4600; border:1px solid #f0d9a4; font:600 .78rem/1.3 'DM Sans',sans-serif; text-align:left; }
+  .lab-toc-proto i{ width:7px; height:7px; border-radius:50%; background:#d99a0b; flex:none; }
+  .lab-toc-proto span{ margin-left:auto; text-decoration:underline; font-weight:500; }
+
+  /* ---------- Mobil ---------- */
+  @media (max-width: 760px){
+    #labBar{ gap:8px; padding-left:8px; padding-right:8px; }
+    #labCrumbs li{ display:none; }
+    #labCrumbs li.lab-up, #labCrumbs li.lab-keep{ display:flex; }
+    #labCrumbs li.lab-up::before{ content:none; }
+    #labCrumbs li.lab-keep .lab-brand-rest{ display:none; }
+    /* Mobil: HelpCenter og språk synlig, Innhold blir menyknappen helt til høyre */
+    #labShareBtn, .lab-sep, #labFsBtn{ display:none !important; }
+    #labHcBtn .lab-lbl{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+    #labHcBtn{ padding:0 8px; }
+    #labTocBtn{ order:10; }
+    .lab-nav[aria-expanded="true"]::after{ bottom:-11px; }
+    #labBadge{ left:12px; }
+    .box-selector.active{ align-items:flex-start; padding-top:24px; }
+    .box-track-cards{ flex-direction:column; align-items:center; }
+    .box-track-card{ max-width:none; width:100%; }
+  }
+  @media (max-width: 760px){
+    /* Fanerader holdes på én linje og kan skyves sidelengs */
+    .page-nav{ flex-wrap:nowrap; justify-content:flex-start; overflow-x:auto; padding:8px 12px; scrollbar-width:none; }
+    .page-nav::-webkit-scrollbar{ display:none; }
+    .page-btn{ padding:7px 11px; font-size:.78rem; white-space:nowrap; flex:none; }
+    /* Sidepilene la seg over innholdet på mobil. Fanene gjør samme jobb. */
+    .side-arrow{ display:none !important; }
+    #labBadge{ display:none; }
+    #labFsBtn{ display:none; }
+    .lab-toc-proto, .lab-toc-share{ display:flex; }
+    .splash{ align-items:flex-start !important; overflow-y:auto; }
+    .splash-content{ padding-top:24px !important; }
+  }
