@@ -1,0 +1,39 @@
+/* responsivt.css : modul i Dalux-presentasjonen. Lastes i rekkefolge fra index.html. Ingen byggesteg, rediger direkte. */
+  /* ============================================= */
+  /* Responsivitet - reflows på smale skjermer      */
+  /* ============================================= */
+
+  /* Stable kortvelgere vertikalt under typisk laptop-bredde */
+  @media (max-width: 740px) {
+    .splash-modules { flex-direction:column; align-items:stretch; }
+    .splash-mod { min-width:0; }
+    .box-track-cards { flex-direction:column; align-items:stretch; }
+    .box-track-card { max-width:none; min-width:0; }
+    .comm-info-cards { flex-direction:column; }
+    .cde-pipeline { flex-direction:column; }
+    .cde-arrow-sep { width:auto; transform:rotate(90deg); margin:4px 0; }
+    /* Brukergrupper-track */
+    .splash-common-cards { flex-direction:column; }
+    .splash-common-card { width:100%; justify-content:center; }
+    .bg-cards { flex-direction:column; align-items:stretch; }
+    .bg-card { max-width:none; }
+    .bg-principles { flex-direction:column; }
+    .bg-split-cols { flex-direction:column; }
+  }
+
+  /* Field side 2: scenario-picker har allerede flex-wrap, men trange skjermer trenger litt mindre min-width */
+  @media (max-width: 600px) {
+    .sc-btn { min-width:120px; padding:12px 14px; }
+    .splash-title { font-size:1.8rem; }
+    #boxPage1 header h1, #boxPage2 header h1, #boxPage3 header h1 { font-size:1.3rem; }
+    #page1 header h1 { font-size:1.4rem; }
+    #page2 header h1 { font-size:1.6rem; }
+    #brukergrupperPage1 header h1, #brukergrupperPage2 header h1, #brukergrupperPage3 header h1 { font-size:1.3rem; }
+    .bg-intro-quote { font-size:1rem; }
+    .splash-content, .files-soon-card { padding:32px 24px; }
+  }
+
+  /* Field side 1: hub-stage er allerede fleksibel (aspect-ratio), men trenger litt luft når den blir høy */
+  @media (max-height: 760px) and (min-width: 1100px) {
+    #page1 { justify-content:flex-start; padding-top:calc(var(--topbar-h) + 8px); }
+  }

@@ -1,0 +1,111 @@
+/* base.css : modul i Dalux-presentasjonen. Lastes i rekkefolge fra index.html. Ingen byggesteg, rediger direkte. */
+  :root {
+    --bg: #f5f7fa; --surface: #ffffff; --surface-2: #f0f2f5; --border: #e2e5ea;
+    --text: #2d3748; --muted: #718096;
+    --dalux: #8DC63F; --dalux-dark: #6fa032;
+    --accent: #6fa032; --accent-g: rgba(74,124,89,.1);
+    --green: #8DC63F; --green-g: rgba(141,198,63,.1);
+    --orange: #e67e22; --orange-g: rgba(230,126,34,.1);
+    --yellow: #d4a017; --yellow-g: rgba(212,160,23,.1);
+    --red: #e74c3c; --red-g: rgba(231,76,60,.1);
+    --purple: #8e6abf;
+    /* Layout-offsets brukt av fixed/sticky-elementer */
+    --topbar-h: 52px;
+    --sticky-top: 56px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { font-size:19px; }
+  body {
+    font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text);
+    min-height:100vh; overflow-x:hidden;
+  }
+
+  /* Tilgjengelighet: synlig fokus-ramme for tastaturnavigasjon */
+  button { font: inherit; color: inherit; }
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 2px solid var(--dalux);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .splash-mod:focus-visible,
+  .box-track-card:focus-visible,
+  .sc-btn:focus-visible { outline-offset: 4px; border-radius: 16px; }
+  .side-arrow:focus-visible { outline-offset: 4px; border-radius: 50%; }
+
+  /* Top bar */
+  /* Splash / Intro */
+  .splash {
+    position:fixed; inset:0; z-index:1000;
+    background:var(--bg);
+    display:flex; align-items:center; justify-content:center;
+    transition: opacity .5s ease, visibility .5s ease;
+  }
+  .splash.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+  .splash-content {
+    text-align:center; max-width:520px; padding:40px 32px;
+  }
+  .splash-title {
+    font-size:2.2rem; font-weight:700; letter-spacing:-.03em;
+    color:var(--text); margin-bottom:4px;
+  }
+  .splash-subtitle {
+    font-family:'Space Mono',monospace; font-size:.8rem; text-transform:uppercase;
+    letter-spacing:.1em; color:var(--dalux); margin-bottom:24px;
+  }
+  .splash-divider {
+    width:48px; height:3px; background:var(--dalux); border-radius:2px;
+    margin:0 auto 24px; opacity:.5;
+  }
+  .splash-desc {
+    font-size:.92rem; color:var(--muted); line-height:1.7; margin-bottom:20px;
+  }
+  .splash-notice {
+    background:rgba(141,198,63,.06); border:1px solid rgba(141,198,63,.15);
+    border-radius:12px; padding:16px 20px; margin-bottom:28px;
+    display:flex; align-items:flex-start; gap:10px; text-align:left;
+    font-size:.84rem; color:var(--text); line-height:1.6;
+  }
+  .splash-notice-icon { flex-shrink:0; font-size:1.1rem; margin-top:1px; }
+  .page-nav.hidden { opacity:0; pointer-events:none; }
+
+  /* Module selector */
+  .splash-choose {
+    font-family:'Space Mono',monospace; font-size:.7rem; text-transform:uppercase;
+    letter-spacing:.1em; color:var(--muted); margin-bottom:16px;
+  }
+  .splash-modules {
+    display:flex; gap:16px; justify-content:center;
+  }
+  .splash-mod {
+    background:var(--surface); border:2px solid var(--border); border-radius:16px;
+    padding:28px 32px; cursor:pointer; text-align:center; min-width:200px;
+    transition:all .25s; font-family:'DM Sans',sans-serif;
+  }
+  .splash-mod:hover { border-color:var(--dalux); transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,.08); }
+  .splash-mod-icon { margin-bottom:12px; }
+  .splash-mod-name { font-weight:700; font-size:1.15rem; margin-bottom:4px; color:var(--text); }
+  .splash-mod-desc { font-size:.78rem; color:var(--muted); }
+
+  /* Modules */
+  .module { display:none; }
+  .module.active { display:block; }
+
+  /* Back to modules button */
+  .back-btn {
+    position:fixed; top:var(--topbar-h); left:20px; z-index:101;
+    background:var(--surface); border:1px solid var(--border); border-radius:8px;
+    color:var(--muted); padding:7px 12px; font-size:.78rem; cursor:pointer;
+    font-family:'DM Sans',sans-serif; display:flex; align-items:center; gap:6px;
+    transition:all .2s; box-shadow:0 1px 2px rgba(0,0,0,.04);
+  }
+  .back-btn:hover { border-color:var(--dalux); color:var(--text); }
+
+  /* Box colors */
+  :root {
+    --box-blue: #3b82f6; --box-blue-g: rgba(59,130,246,.1);
+    --box-amber: #f59e0b; --box-amber-g: rgba(245,158,11,.1);
+    --box-indigo: #6366f1; --box-indigo-g: rgba(99,102,241,.1);
+    --box-slate: #64748b; --box-slate-g: rgba(100,116,139,.1);
+  }
+

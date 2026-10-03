@@ -1,0 +1,129 @@
+/* box-iso-og-nav.css : modul i Dalux-presentasjonen. Lastes i rekkefolge fra index.html. Ingen byggesteg, rediger direkte. */
+  /* Box Levels (Box Page 2) */
+  .box-levels { max-width:800px; width:100%; margin:0 auto; display:flex; flex-direction:column; gap:16px; }
+  .box-level {
+    background:var(--surface); border:2px solid var(--border); border-radius:14px;
+    overflow:hidden; transition:all .3s;
+  }
+  .box-level:hover { box-shadow:0 4px 16px rgba(0,0,0,.06); }
+  .box-level-header {
+    padding:18px 24px; display:flex; align-items:center; gap:14px;
+    border-bottom:1px solid var(--border);
+  }
+  .box-level-header h3 { font-size:.95rem; }
+  .box-level-badge {
+    font-family:'Space Mono',monospace; font-size:.6rem; text-transform:uppercase;
+    letter-spacing:.06em; padding:4px 10px; border-radius:6px; white-space:nowrap;
+  }
+  .box-level-badge.easy { background:var(--green-g); color:var(--green); }
+  .box-level-badge.medium { background:var(--box-amber-g); color:var(--box-amber); }
+  .box-level-badge.full { background:var(--box-blue-g); color:var(--box-blue); }
+  .box-level-body { padding:18px 24px; }
+  .box-level-body p { font-size:.85rem; color:var(--muted); line-height:1.6; margin-bottom:14px; }
+  .box-features { display:flex; flex-direction:column; gap:8px; }
+  .box-feat {
+    display:flex; align-items:center; gap:10px;
+    font-size:.84rem; color:var(--text);
+  }
+  .bf-icon { font-size:1rem; flex-shrink:0; }
+
+  /* Document flow pipeline (Box Page 3) */
+  .doc-flow-container { max-width:800px; width:100%; margin:0 auto; }
+  .doc-flow-pipeline {
+    display:flex; align-items:center; gap:0;
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:20px 24px; margin-bottom:20px;
+    position:sticky; top:var(--sticky-top); z-index:15; box-shadow:0 4px 12px -4px rgba(0,0,0,.06);
+  }
+  .doc-pipe-zone {
+    flex:1; text-align:center; padding:10px; border-radius:10px;
+    border:2px solid var(--border); transition:all .4s;
+  }
+  .doc-pipe-zone.active { animation:av-pulse 1.2s ease-in-out infinite; }
+  .doc-pipe-zone.done { opacity:.5; }
+  .doc-pipe-label {
+    font-family:'Space Mono',monospace; font-size:.72rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:.06em;
+  }
+  .doc-pipe-label.wip { color:var(--box-blue); }
+  .doc-pipe-label.shared { color:var(--box-amber); }
+  .doc-pipe-label.published { color:var(--green); }
+  .doc-pipe-sep { width:32px; height:2px; background:var(--border); flex-shrink:0; }
+  .doc-timeline { position:relative; padding-left:40px; }
+  .doc-timeline::before {
+    content:''; position:absolute; left:18px; top:0; bottom:0; width:2px;
+    background:var(--border);
+  }
+
+  /* Box page layouts */
+  #boxPage1, #boxPage2, #boxPage3 {
+    flex-direction:column; align-items:center;
+    padding:70px 24px 40px; overflow-y:auto; min-height:100vh;
+  }
+  #boxPage1 header, #boxPage2 header, #boxPage3 header {
+    text-align:center; margin-bottom:24px;
+  }
+  #boxPage1 header h1, #boxPage2 header h1, #boxPage3 header h1 {
+    font-size:1.6rem; font-weight:700; letter-spacing:-.02em;
+  }
+  #boxPage1 header p, #boxPage2 header p, #boxPage3 header p {
+    color:var(--muted); font-size:.88rem; margin-top:4px;
+  }
+
+  .topbar {
+    position:fixed; top:0; left:0; right:0; height:3px; z-index:200;
+    background:linear-gradient(90deg,#8DC63F,#6fa032);
+  }
+
+  /* Page nav */
+  .page-nav {
+    position:fixed; top:3px; left:0; right:0; z-index:100;
+    background:rgba(255,255,255,.92); backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    padding:10px 20px; transition:opacity .5s ease;
+  }
+  .page-btn {
+    background:var(--surface); border:1px solid var(--border); border-radius:8px;
+    padding:8px 18px; font-family:'DM Sans',sans-serif; font-size:.84rem;
+    font-weight:500; cursor:pointer; color:var(--muted); transition:all .25s;
+    display:flex; align-items:center; gap:6px;
+  }
+  .page-btn:hover { border-color:var(--dalux); color:var(--text); }
+  .page-btn.active { background:var(--dalux); border-color:var(--dalux); color:#fff; }
+
+  /* Side navigation arrows */
+  .side-arrow {
+    position:fixed; top:50%; transform:translateY(-50%); z-index:90;
+    width:64px; height:64px; border-radius:50%;
+    background:rgba(255,255,255,.92); border:2px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; opacity:.55; transition:all .25s;
+    font-size:1.5rem; color:var(--text);
+    box-shadow:0 2px 12px rgba(0,0,0,.1);
+    backdrop-filter:blur(8px);
+  }
+  .side-arrow:hover { opacity:1; border-color:var(--dalux); color:var(--dalux); box-shadow:0 4px 16px rgba(141,198,63,.25); }
+  .side-arrow.left { left:16px; }
+  .side-arrow.right { right:16px; }
+  .side-arrow.hidden { opacity:0; pointer-events:none; }
+  .page-btn .pnum {
+    font-family:'Space Mono',monospace; font-size:.62rem;
+    width:20px; height:20px; border-radius:50%;
+    display:inline-flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,.08);
+  }
+  .page-btn.active .pnum { background:rgba(0,0,0,.15); }
+
+  /* Pages */
+  .page { display:none; opacity:0; }
+  .page.visible { display:flex; opacity:1; }
+  .page.slide-in-right { display:flex; animation: slideInRight .5s cubic-bezier(.4,0,.2,1) forwards; }
+  .page.slide-in-left { display:flex; animation: slideInLeft .5s cubic-bezier(.4,0,.2,1) forwards; }
+  .page.slide-out-right { display:flex; animation: slideOutRight .5s cubic-bezier(.4,0,.2,1) forwards; }
+  .page.slide-out-left { display:flex; animation: slideOutLeft .5s cubic-bezier(.4,0,.2,1) forwards; }
+  @keyframes slideInRight { from { opacity:0; transform:translateX(60px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes slideInLeft { from { opacity:0; transform:translateX(-60px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes slideOutRight { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(60px); } }
+  @keyframes slideOutLeft { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(-60px); } }
+

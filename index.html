@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<!-- Dalux interaktiv presentasjon. Modulaer struktur: CSS i css/, JS i js/. Ingen byggesteg, rediger filene direkte. Se docs/START-HER.md. -->
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interaktiv presentasjon av Dalux Field og Box - arbeidsflyt, kommunikasjon, ISO 19650 og brukergrupper">
+<meta property="og:title" content="Dalux - Interaktiv presentasjon">
+<meta property="og:description" content="Utforsk Dalux Field og Box gjennom interaktive visualiseringer av arbeidsflyt, kommunikasjonsflyt, ISO 19650 og brukergrupper.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="nb_NO">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dalux - Interaktiv presentasjon">
+<meta name="twitter:description" content="Interaktiv presentasjon av Dalux Field og Box - arbeidsflyt, kommunikasjon, ISO 19650 og brukergrupper">
+<title>Dalux - Interaktiv presentasjon</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/box-samhandling.css">
+<link rel="stylesheet" href="css/box-mappestruktur.css">
+<link rel="stylesheet" href="css/brukergrupper.css">
+<link rel="stylesheet" href="css/box-iso-og-nav.css">
+<link rel="stylesheet" href="css/field.css">
+<link rel="stylesheet" href="css/responsivt.css">
+</head>
+<body>
+<div class="topbar"></div>
+
+<!-- Intro splash / Module selector -->
+<div class="splash" id="splash">
+  <div class="splash-content">
+    <h1 class="splash-title">Dalux</h1>
+    <p class="splash-subtitle">Interaktiv presentasjon</p>
+    <div class="splash-divider"></div>
+    <p class="splash-desc">Her viser vi hvordan Dalux fungerer, med konkrete eksempler fra et byggeprosjekt.</p>
+    <div class="splash-notice">
+      <span class="splash-notice-icon">ℹ️</span>
+      <span>Dette er <strong>ikke</strong> en ferdig oppskrift. En prosjektadministrator setter opp hvert prosjekt etter behov.</span>
+    </div>
+    <p class="splash-choose">Velg modul</p>
+    <div class="splash-modules">
+      <button class="splash-mod" onclick="openModule('field')">
+        <div class="splash-mod-icon">
+          <svg viewBox="0 0 48 48" width="40" height="40"><rect x="6" y="6" width="36" height="36" rx="8" fill="none" stroke="#8DC63F" stroke-width="3"/><rect x="14" y="16" width="20" height="3" rx="1.5" fill="#8DC63F" opacity=".6"/><rect x="14" y="23" width="14" height="3" rx="1.5" fill="#8DC63F" opacity=".4"/><rect x="14" y="30" width="8" height="3" rx="1.5" fill="#8DC63F" opacity=".25"/></svg>
+        </div>
+        <div class="splash-mod-name">Field</div>
+        <div class="splash-mod-desc">Oppgaver, sjekklister og arbeidsflyt</div>
+      </button>
+      <button class="splash-mod" onclick="openModule('box')">
+        <div class="splash-mod-icon">
+          <svg viewBox="0 0 48 48" width="40" height="40"><path d="M8 16l16-10 16 10v16l-16 10-16-10z" fill="none" stroke="#3b82f6" stroke-width="3" stroke-linejoin="round"/><path d="M8 16l16 10 16-10" fill="none" stroke="#3b82f6" stroke-width="2" opacity=".4"/><path d="M24 26v16" fill="none" stroke="#3b82f6" stroke-width="2" opacity=".4"/></svg>
+        </div>
+        <div class="splash-mod-name">Box</div>
+        <div class="splash-mod-desc">Filer, kommentarer og ISO 19650</div>
+      </button>
+    </div>
+    <div class="splash-common-section">
+      <p class="splash-common-label">Felles begreper</p>
+      <div class="splash-common-cards">
+        <button class="splash-common-card" onclick="openCommonTrack('brukergrupper')">
+          <span class="splash-common-icon">👥</span>
+          <span class="splash-common-name">Brukergrupper</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODULE: FIELD ============ -->
+<div class="module" id="modField">
+
+<button class="back-btn" onclick="backToSplash()">← Moduler</button>
+
+<!-- Page navigation -->
+<div class="page-nav" id="pageNav">
+  <button class="page-btn active" onclick="showPage(1)" id="pb1"><span class="pnum">1</span> Entrepriser</button>
+  <button class="page-btn" onclick="showPage(2)" id="pb2"><span class="pnum">2</span> Oppgaver</button>
+</div>
+
+<button class="fs-btn" onclick="toggleFS()" id="fsBtn" style="opacity:0;pointer-events:none">⛶ Fullskjerm</button>
+
+<!-- ========================================= -->
+<!-- PAGE 1: Liste / Hub                        -->
+<!-- ========================================= -->
+<div class="page visible" id="page1">
+
+  <header>
+    <h1>Fra liste til virkelighet</h1>
+    <p>Klikk på fanene for å bytte visning, og på en entreprise for å se arbeidsforløpene</p>
+  </header>
+
+  <div class="hub-tabs">
+    <button class="hub-tab on" id="tList" onclick="setView('list')"><span class="num">1</span>Listevisning</button>
+    <button class="hub-tab" id="tHub" onclick="setView('hub')"><span class="num">2</span>Kommunikasjonsflyt</button>
+  </div>
+
+  <div class="hub-stage list-view" id="hubStage">
+    <div class="list-chrome" id="listChrome">
+      <div class="lc-bar">
+        <div class="lc-btn">+ Legg til entreprise</div>
+        <div class="lc-g">👥 Vis detaljer</div>
+        <div class="lc-g">🖨 Skriv ut</div>
+      </div>
+      <div class="lc-search">
+        <input type="text" value="🔍 Søk" disabled>
+        <div class="lc-fl">+ Tilføy filter</div>
+      </div>
+      <div class="lc-hd"><span>Oppretter</span><span>Svarer</span></div>
+    </div>
+    <svg class="hub-svg" id="hubSvg" viewBox="0 0 1100 620" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="hub-center" id="hubCenter">
+      <div class="hc-label">Rolle</div>
+      <div class="hc-name">Totalentreprenør / Systemeier</div>
+    </div>
+  </div>
+
+  <div class="hub-caption" id="hubCaption">Klikk på en entreprise for å se arbeidsforløpene</div>
+</div>
+
+<!-- Workflow overlay (shared) -->
+<div class="wf-overlay" id="wfOverlay" onclick="if(event.target===this)closeWf()">
+  <div class="wf-panel">
+    <button class="wf-close" onclick="closeWf()" aria-label="Lukk arbeidsforløp">✕</button>
+    <div class="wf-title"><div class="wf-dot" id="wfDot"></div><span id="wfName"></span></div>
+    <div class="wf-sub">Slik kan arbeidsforløpene se ut i entreprisen</div>
+
+    <div class="wf-mode-tabs">
+      <button class="hub-tab on" data-mode="lite" onclick="setWfMode('lite')">Lite prosjekt</button>
+      <button class="hub-tab" data-mode="stort" onclick="setWfMode('stort')">Stort prosjekt</button>
+    </div>
+
+    <!-- LITE PROSJEKT: alle oppgaver behandles av TE, ofte fordi samme person har flere "hatter" -->
+    <div class="wf-flow-set on" data-mode="lite">
+      <div class="wf-flow">
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-arrow">
+          <div class="wf-label">Oppgaveforløp</div>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#d4a017"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#d4a017" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#d4a017"/><polygon points="0,7 8,13 8,9" fill="#d4a017"/></svg>
+        </div>
+        <div class="wf-role" style="background:var(--yellow-g);color:var(--yellow);">TE</div>
+        <div class="wf-type" style="background:var(--yellow-g);color:var(--yellow);">Rapport</div>
+      </div>
+      <div class="wf-flow">
+        <div class="wf-role" style="background:var(--yellow-g);color:var(--yellow);">TE</div>
+        <div class="wf-arrow">
+          <div class="wf-label">Oppgaveforløp</div>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#d4a017"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#d4a017" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#d4a017"/><polygon points="0,7 8,13 8,9" fill="#d4a017"/></svg>
+        </div>
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-type" style="background:var(--yellow-g);color:var(--yellow);">Utbedring</div>
+      </div>
+      <div class="wf-flow">
+        <div class="wf-role" style="background:var(--orange-g);color:var(--orange);">HMS-ledere</div>
+        <div class="wf-arrow">
+          <div class="wf-label">HMS-forløp</div>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#e67e22"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#e67e22" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#e67e22"/><polygon points="0,7 8,13 8,9" fill="#e67e22"/></svg>
+        </div>
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-type" style="background:var(--orange-g);color:var(--orange);">Utbedring</div>
+      </div>
+    </div>
+
+    <!-- STORT PROSJEKT: dedikerte fagledere reduserer støy og gir mer presise rettigheter -->
+    <div class="wf-flow-set" data-mode="stort">
+      <div class="wf-flow">
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-arrow">
+          <div class="wf-label">Kvalitetsforløp</div>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#3b82f6"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#3b82f6" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#3b82f6"/><polygon points="0,7 8,13 8,9" fill="#3b82f6"/></svg>
+        </div>
+        <div class="wf-role" style="background:var(--box-blue-g);color:var(--box-blue);">Kvalitetsleder</div>
+        <div class="wf-type" style="background:var(--box-blue-g);color:var(--box-blue);">Rapport</div>
+      </div>
+      <div class="wf-flow">
+        <div class="wf-role" style="background:var(--box-blue-g);color:var(--box-blue);">Kvalitetsleder</div>
+        <div class="wf-arrow">
+          <div class="wf-label">Kvalitetsforløp</div>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#3b82f6"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#3b82f6" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#3b82f6"/><polygon points="0,7 8,13 8,9" fill="#3b82f6"/></svg>
+        </div>
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-type" style="background:var(--box-blue-g);color:var(--box-blue);">Utbedring</div>
+      </div>
+      <div class="wf-flow">
+        <div class="wf-role" style="background:var(--orange-g);color:var(--orange);">HMS-leder</div>
+        <div class="wf-arrow">
+          <div class="wf-label">HMS-forløp</div>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#e67e22"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#e67e22" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#e67e22"/><polygon points="0,7 8,13 8,9" fill="#e67e22"/></svg>
+        </div>
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-type" style="background:var(--orange-g);color:var(--orange);">Utbedring</div>
+      </div>
+      <div class="wf-flow">
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-arrow">
+          <div class="wf-label">Miljøforløp</div>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#6366f1"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#6366f1" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#6366f1"/><polygon points="0,7 8,13 8,9" fill="#6366f1"/></svg>
+        </div>
+        <div class="wf-role" style="background:var(--box-indigo-g);color:var(--box-indigo);">Ytre miljø</div>
+        <div class="wf-type" style="background:var(--box-indigo-g);color:var(--box-indigo);">Rapport</div>
+      </div>
+      <div class="wf-flow">
+        <div class="wf-role" style="background:var(--box-indigo-g);color:var(--box-indigo);">Ytre miljø</div>
+        <div class="wf-arrow">
+          <div class="wf-label">Miljøforløp</div>
+          <svg viewBox="0 0 200 14"><polygon points="0,7 8,1 8,5" fill="#6366f1"/><rect x="8" y="5.5" width="184" height="3" rx="1" fill="#6366f1" opacity=".5"/><polygon points="200,7 192,1 192,13" fill="#6366f1"/><polygon points="0,7 8,13 8,9" fill="#6366f1"/></svg>
+        </div>
+        <div class="wf-role wf-fag" style="background:var(--accent-g);color:var(--accent);">Fag</div>
+        <div class="wf-type" style="background:var(--box-indigo-g);color:var(--box-indigo);">Utbedring</div>
+      </div>
+    </div>
+
+    <p class="wf-mode-hint" id="wfModeHint">I små prosjekter behandler totalentreprenøren alle saker, ofte fordi samme person har flere "hatter".</p>
+  </div>
+</div>
+
+
+<!-- ========================================= -->
+<!-- PAGE 2: Oppgave livssyklus                 -->
+<!-- ========================================= -->
+<div class="page intro" id="page2">
+  <header>
+    <h1>Oppgaver: Fra opprettet til lukket</h1>
+    <p>Følg en oppgave gjennom arbeidsforløpet, fra oppretting til godkjenning.</p>
+  </header>
+
+  <!-- Scenario picker -->
+  <div class="scenario-picker" id="scenarioPicker">
+    <button class="sc-btn active" onclick="setScenario(0)" id="scBtn0">
+      <span class="sc-icon" id="scIcon0"></span>
+      <span class="sc-label">Enkel oppgave</span>
+      <span class="sc-desc">Løses i ett forløp</span>
+    </button>
+    <button class="sc-btn" onclick="setScenario(1)" id="scBtn1">
+      <span class="sc-icon" id="scIcon1"></span>
+      <span class="sc-label">Kryssforløp</span>
+      <span class="sc-desc">Sendes til annet forløp</span>
+    </button>
+    <button class="sc-btn" onclick="setScenario(2)" id="scBtn2">
+      <span class="sc-icon" id="scIcon2"></span>
+      <span class="sc-label">HMS-forløp</span>
+      <span class="sc-desc">Observasjon til HMS-oppgave</span>
+    </button>
+    <button class="sc-btn" onclick="setScenario(3)" id="scBtn3">
+      <span class="sc-icon" id="scIcon3"></span>
+      <span class="sc-label">Godkjenning</span>
+      <span class="sc-desc">Endringsmelding med ledd</span>
+    </button>
+  </div>
+
+  <!-- Scenario description -->
+  <div class="scenario" id="scenarioBox">
+    <div class="scenario-icon" id="scBoxIcon">🔧</div>
+    <div>
+      <h3 id="scBoxTitle">Scenario</h3>
+      <p id="scBoxDesc">Beskrivelse</p>
+      <div class="scenario-roles" id="scBoxRoles"></div>
+    </div>
+  </div>
+
+  <div class="lc-stage">
+    <div class="wf-rows-container" id="wfRowsContainer">
+      <div class="columns" id="wfRow1">
+        <div class="wf-row-label" id="wfRow1Label">Forløp 1 <span></span></div>
+        <div class="col" id="colLeft">
+          <div class="col-avatar" id="colLeftAv">🔧</div>
+          <div class="col-name" id="colLeftName">-</div>
+          <div class="col-role" id="colLeftRole">Oppretter</div>
+        </div>
+        <div class="wf-arrow-col" id="wfArrow1">
+          <svg viewBox="0 0 80 14" width="80" height="14"></svg>
+        </div>
+        <div class="col" id="colRight">
+          <div class="col-avatar" id="colRightAv">👷</div>
+          <div class="col-name" id="colRightName">-</div>
+          <div class="col-role" id="colRightRole">Svarer</div>
+        </div>
+      </div>
+      <div class="columns wf-row-2" id="wfRow2">
+        <div class="wf-row-label" id="wfRow2Label">Forløp 2 <span></span></div>
+        <div class="col" id="colLeft2">
+          <div class="col-avatar" id="colLeft2Av">👷</div>
+          <div class="col-name" id="colLeft2Name">-</div>
+          <div class="col-role" id="colLeft2Role">Oppretter</div>
+        </div>
+        <div class="wf-arrow-col" id="wfArrow2">
+          <svg viewBox="0 0 80 14" width="80" height="14"></svg>
+        </div>
+        <div class="col" id="colRight2">
+          <div class="col-avatar" id="colRight2Av">🌀</div>
+          <div class="col-name" id="colRight2Name">-</div>
+          <div class="col-role" id="colRight2Role">Svarer</div>
+        </div>
+      </div>
+    </div>
+    <!-- Pipeline view for approval scenarios -->
+    <div class="pipeline-container" id="pipelineContainer">
+      <div class="pipeline-label">Varsel om endring</div>
+      <div class="pipeline">
+        <div class="pipe-box" id="pipe0">
+          <div class="pipe-title" id="pipe0Title">UE</div>
+          <div class="pipe-role" id="pipe0Role">Innmelder</div>
+        </div>
+        <div class="pipe-line"></div>
+        <div class="pipe-box" id="pipe1">
+          <div class="pipe-title" id="pipe1Title">TE</div>
+          <div class="pipe-role" id="pipe1Role">Behandler</div>
+        </div>
+        <div class="pipe-line pipe-fork-line"></div>
+        <div class="pipe-branch">
+          <div class="pipe-branch-top">
+            <div class="pipe-branch-line"></div>
+            <div class="pipe-box pipe-end" id="pipe2">
+              <div class="pipe-end-label">Godkjenning</div>
+              <div class="pipe-title" id="pipe2Title">Byggherre</div>
+              <div class="pipe-role" id="pipe2Role">Godkjenner</div>
+            </div>
+          </div>
+          <div class="pipe-branch-bottom">
+            <div class="pipe-branch-line"></div>
+            <div class="pipe-box pipe-end pipe-disputed" id="pipe3">
+              <div class="pipe-end-label">Omtvistet</div>
+              <div class="pipe-title" id="pipe3Title">Omtvistet</div>
+              <div class="pipe-role" id="pipe3Role">Lukket med uenighet</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline" id="timeline"></div>
+    <!-- spacer for fixed bottom bar -->
+    <div style="height:80px;"></div>
+  </div>
+
+  <!-- Fixed bottom controls (outside lc-stage) -->
+  <div class="controls" id="lcControls">
+    <button class="ctrl-btn" id="btnPrev" onclick="lcPrev()" disabled>← Forrige</button>
+    <div class="lc-progress" id="lcProgress"></div>
+    <button class="ctrl-btn primary" id="btnNext" onclick="lcNext()">Start ▶</button>
+  </div>
+</div>
+
+</div> <!-- end modField -->
+
+<!-- ============ MODULE: BOX ============ -->
+<div class="module" id="modBox">
+
+<!-- Box sub-selector -->
+<div class="box-selector" id="boxSelector">
+<button class="back-btn" onclick="backToSplash()">← Moduler</button>
+<button class="fs-btn" onclick="toggleFS()" id="fsBtnBoxSel" style="opacity:0;pointer-events:none">⛶ Fullskjerm</button>
+
+<div class="splash-content" style="max-width:800px">
+  <h1 class="splash-title">Dalux Box</h1>
+  <p class="splash-subtitle">Velg tema</p>
+  <div class="splash-divider"></div>
+  <div class="box-track-cards">
+    <button class="box-track-card" onclick="openBoxTrack('comm')">
+      <div class="box-track-icon">💬</div>
+      <div class="box-track-name">Samhandling i Box</div>
+      <div class="box-track-desc">Enkel deling og kommunikasjon rundt dokumenter i prosjektet</div>
+    </button>
+    <button class="box-track-card" onclick="openBoxTrack('files')" aria-label="Mappestruktur og filhåndtering">
+      <div class="box-track-icon">📁</div>
+      <div class="box-track-name">Mappestruktur og filhåndtering</div>
+      <div class="box-track-desc">Hold mappene flate, og la metadata styre filtrering og navngiving</div>
+    </button>
+    <button class="box-track-card" onclick="openBoxTrack('iso')">
+      <div class="box-track-icon">📐</div>
+      <div class="box-track-name">ISO 19650</div>
+      <div class="box-track-desc">Full CDE-oppsett med statusområder, innsendinger og godkjenningsflyt</div>
+    </button>
+  </div>
+</div>
+</div>
+
+<!-- Box Track: Kommunikasjonsflyt -->
+<div class="box-track" id="boxTrackComm">
+<button class="back-btn" onclick="backToBoxSelector()">← Box</button>
+
+<button class="fs-btn" onclick="toggleFS()" id="fsBtnComm" style="opacity:0;pointer-events:none">⛶ Fullskjerm</button>
+
+<!-- COMM PAGE 1: Kommunikasjonsflyt -->
+<div class="page visible" id="commPage1">
+
+  <div class="comm-tabs">
+    <button class="comm-tab on" data-commtab="list" onclick="commTab('list')"><span class="num">1</span>Oppsett</button>
+    <button class="comm-tab" data-commtab="hub" onclick="commTab('hub')"><span class="num">2</span>Kommunikasjonsflyt</button>
+    <button class="comm-tab" data-commtab="status" onclick="commTab('status')"><span class="num">3</span>Statuser</button>
+    <button class="comm-tab" data-commtab="comment" onclick="commTab('comment')"><span class="num">4</span>Kommentar: opprett, send, lukk</button>
+  </div>
+
+  <div class="comm-intro">
+    <p>I Dalux Box oppretter du <strong>kommentarer</strong> direkte på tegninger, PDF-er og BIM-modeller. Hver kommentar tilhører en <strong>kommunikasjonsflyt</strong> som styrer hvilke grupper som kan se, opprette, redigere og lukke den. Slik sørger flyten for at riktig informasjon når riktige personer, og at all dialog er sporbar.</p>
+  </div>
+
+  <div class="comm-view-info" id="commViewInfo">
+    <div class="comm-info-list" id="commInfoList">
+      <div class="comm-info-cards">
+        <div class="comm-info-card">
+          <div class="comm-info-icon">👥</div>
+          <div class="comm-info-title">Brukergrupper og rettigheter</div>
+          <div class="comm-info-text">Hver kommunikasjonsflyt inneholder brukergrupper med egne rettigheter: <strong>Les</strong>, <strong>Rediger</strong> og <strong>Lukk</strong>. Tenk nøye gjennom hvem som trenger hvilke rettigheter. De med Rediger-rettighet kan oppdatere status og sende kommentarer videre. Lukk-rettigheten avgjør hvem som kan avslutte saker, og dette varierer per flyt: i en prosjekteringsflyt kan det være prosjekteringsleder, mens i en byggherreflyt er det typisk byggherre selv.</div>
+        </div>
+        <div class="comm-info-card">
+          <div class="comm-info-icon">💬</div>
+          <div class="comm-info-title">Kommentartyper</div>
+          <div class="comm-info-text">Du kan knytte hver <strong>kommentartype</strong> til én eller flere flyter. Kommentartypene kan ha egendefinerte felter (tekst, nedtrekklister, tallverdier) og egne statusverdier med fargekoder. Definer kommentartypene etter prosjektets behov, f.eks. «Prosjektering», «RFI» eller «Byggherreavklaring».</div>
+        </div>
+        <div class="comm-info-card">
+          <div class="comm-info-icon">🏷️</div>
+          <div class="comm-info-title">Egendefinerte statuser</div>
+          <div class="comm-info-text">Bruk <strong>egendefinerte statuser</strong> med fargekoder for å vise fremdrift. Alle med Rediger-rettighet kan oppdatere status når kommentaren sendes mellom grupper. Statusendringer loggføres automatisk i kommentarens aktivitetslogg, slik at hele historikken er sporbar.</div>
+        </div>
+      </div>
+    </div>
+    <div class="comm-info-hub" id="commInfoHub" style="display:none">
+      <div class="comm-info-cards">
+        <div class="comm-info-card">
+          <div class="comm-info-icon">↔️</div>
+          <div class="comm-info-title">Åpen dialog</div>
+          <div class="comm-info-text">Alle brukergrupper med rettigheter kan sende kommentarer til hvem som helst i flyten, både til grupper og enkeltpersoner. Kommentaren kan bevege seg fritt mellom gruppene til den lukkes.</div>
+        </div>
+        <div class="comm-info-card">
+          <div class="comm-info-icon">📋</div>
+          <div class="comm-info-title">Full sporbarhet</div>
+          <div class="comm-info-text">Hver kommentar har en komplett <strong>aktivitetslogg</strong>: statusendringer, meldinger, vedlegg og hvem som gjorde hva. Kommentaren forblir knyttet til tegningen eller dokumentet den ble opprettet på.</div>
+        </div>
+        <div class="comm-info-card">
+          <div class="comm-info-icon">✅</div>
+          <div class="comm-info-title">Lukking av kommentarer</div>
+          <div class="comm-info-text">Den gruppen som har Lukk-rettighet i flyten avslutter kommentaren når saken er ferdigbehandlet. I dette eksempelet er det Prosjekteringsleder, men det kan like gjerne være Byggherre i en annen flyt. Lukket betyr ikke slettet: all historikk, vedlegg og meldinger bevares permanent.</div>
+        </div>
+      </div>
+    </div>
+    <div class="comm-info-status" id="commInfoStatus" style="display:none">
+      <!-- Før/etter-sammenligning -->
+      <div class="status-compare bg-step" data-statusstep="1">
+        <div class="status-compare-card status-compare-bad">
+          <div class="status-compare-label">Uten egendefinerte statuser</div>
+          <div class="status-timeline">
+            <div class="status-tl-entry">
+              <span class="status-tl-day">Dag 1</span>
+              <span class="cl-status-badge cl-st-default">Aktivert</span>
+            </div>
+            <div class="status-tl-gap">
+              <span class="status-tl-gap-text">⋮ 4 dager stillhet</span>
+            </div>
+            <div class="status-tl-entry">
+              <span class="status-tl-day">Dag 5</span>
+              <span class="cl-status-badge cl-st-closed-default">Lukket</span>
+            </div>
+          </div>
+          <div class="status-compare-quote">"Hva skjedde i mellom?"</div>
+        </div>
+        <div class="status-compare-card status-compare-good">
+          <div class="status-compare-label">Med egendefinerte statuser</div>
+          <div class="status-timeline">
+            <div class="status-tl-entry"><span class="status-tl-day">Dag 1</span><span class="cl-status-badge cl-st-ny">Ny</span></div>
+            <div class="status-tl-entry"><span class="status-tl-day">Dag 2</span><span class="cl-status-badge cl-st-behandling">Under behandling</span></div>
+            <div class="status-tl-entry"><span class="status-tl-day">Dag 3</span><span class="cl-status-badge cl-st-besvart">Besvart</span></div>
+            <div class="status-tl-entry"><span class="status-tl-day">Dag 5</span><span class="cl-status-badge cl-st-lukket">Lukket</span></div>
+          </div>
+          <div class="status-compare-quote">"Hele løpet er sporbart"</div>
+        </div>
+      </div>
+
+      <!-- Eksempel-flyter -->
+      <div class="status-section-header bg-step" data-statusstep="2">
+        <h3>Eksempler på status-oppsett</h3>
+        <p>Start med standardflyten. Tilpass bare når kommentartypen krever det.</p>
+      </div>
+      <div class="status-examples bg-step" data-statusstep="2">
+        <div class="status-example-card recommended">
+          <div class="status-example-label">Anbefalt utgangspunkt</div>
+          <div class="status-example-title">Standardflyt</div>
+          <div class="status-example-desc">Brukes for de fleste kommentartyper. Hold på dette så langt det går for å få konsistens på tvers av prosjektet.</div>
+          <div class="status-example-flow">
+            <span class="cl-status-badge cl-st-ny">Ny</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-behandling">Under behandling</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-besvart">Besvart</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-lukket">Lukket</span>
+          </div>
+        </div>
+        <div class="status-example-card">
+          <div class="status-example-label">Når kommentartypen krever det</div>
+          <div class="status-example-title">RFI</div>
+          <div class="status-example-desc">Request for Information. Litt annerledes flyt, så egne statuser gir mening her.</div>
+          <div class="status-example-flow">
+            <span class="cl-status-badge cl-st-ny">Spurt</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-behandling">Under utredning</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-besvart">Besvart</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-lukket">Avklart</span>
+          </div>
+        </div>
+        <div class="status-example-card">
+          <div class="status-example-label">Når kommentartypen krever det</div>
+          <div class="status-example-title">Byggherreavklaring</div>
+          <div class="status-example-desc">Saker som krever byggherrens beslutning. Statusene speiler beslutningsløpet.</div>
+          <div class="status-example-flow">
+            <span class="cl-status-badge cl-st-ny">Avventer BH</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-besvart">Besvart av BH</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-behandling">Utført</span>
+            <span class="status-arrow">↓</span>
+            <span class="cl-status-badge cl-st-lukket">Lukket</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prinsipper -->
+      <div class="status-section-header bg-step" data-statusstep="3">
+        <h3>Tre prinsipper når du setter opp statuser</h3>
+      </div>
+      <div class="bg-principles bg-step" data-statusstep="3">
+        <div class="bg-principle">
+          <div class="bg-principle-num">Prinsipp 1</div>
+          <div class="bg-principle-title">Standardiser hvor det er mulig</div>
+          <div class="bg-principle-text">Bruk samme status-navn og fargekoder på tvers av kommentartyper. Det gjør oversikten lettere og folk lærer mønsteret raskere.</div>
+        </div>
+        <div class="bg-principle">
+          <div class="bg-principle-num">Prinsipp 2</div>
+          <div class="bg-principle-title">Hold det håndterbart</div>
+          <div class="bg-principle-text">3 til 5 statuser per kommentartype er nok. Flere gjør det vanskeligere å holde orden, og hver enkelt status mister verdi.</div>
+        </div>
+        <div class="bg-principle">
+          <div class="bg-principle-num">Prinsipp 3</div>
+          <div class="bg-principle-title">Dekk hele løpet</div>
+          <div class="bg-principle-text">Ha statuser som dekker fra "Ny" til "Lukket", ikke bare midten. Da ser du både hvor saken starter og når den faktisk er ferdig.</div>
+        </div>
+      </div>
+
+      <!-- Footnote/cross-link -->
+      <div class="status-footnote bg-step" data-statusstep="3">
+        <p>Status-endringer logges automatisk i aktivitetsloggen. Se hva som skjer med en kommentar steg for steg på fanen <strong>Kommentar: opprett, send, lukk</strong>.</p>
+      </div>
+
+      <div style="height:90px"></div>
+      <div class="controls" id="statusControls">
+        <button class="ctrl-btn" id="statusPrev" onclick="statusPrev()" disabled>← Forrige</button>
+        <div class="lc-progress" id="statusProgress"></div>
+        <button class="ctrl-btn primary" id="statusNext" onclick="statusNext()">Neste →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="comm-stage list-view" id="commStage">
+    <!-- List view: Dalux-style cards -->
+    <div class="comm-list-chrome" id="commListChrome">
+      <div class="comm-list-header">
+        <div class="comm-list-title">Prosjekteringsgruppe</div>
+        <div class="comm-list-meta">Kommentartyper: <strong>Kommentar, Prosjektering</strong> &middot; Lukkes av: <strong>Prosjekteringsleder</strong></div>
+      </div>
+    </div>
+
+    <!-- Nodes (both views) -->
+    <svg class="comm-svg" id="commSvg" viewBox="0 0 1100 600" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="comm-center" id="commCenter">
+      <div class="comm-center-label">Lukker kommentarer</div>
+      <div class="comm-center-name">Prosjekterings&shy;leder</div>
+      <div class="comm-center-perms">
+        <div class="comm-perm"><span class="comm-perm-dot perm-on" style="background:#ec4899"></span>Les</div>
+        <div class="comm-perm"><span class="comm-perm-dot perm-on" style="background:#ec4899"></span>Rediger</div>
+        <div class="comm-perm"><span class="comm-perm-dot perm-on" style="background:#ec4899"></span>Lukk</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="comm-caption" id="commCaption">Kommunikasjonsflyten viser hvilke grupper som kan kommunisere sammen</div>
+</div>
+
+<!-- COMM PAGE 2: Kommentar: opprett, send, lukk -->
+<div class="page" id="commPage2">
+
+  <div class="comm-tabs">
+    <button class="comm-tab" data-commtab="list" onclick="commTab('list')"><span class="num">1</span>Oppsett</button>
+    <button class="comm-tab" data-commtab="hub" onclick="commTab('hub')"><span class="num">2</span>Kommunikasjonsflyt</button>
+    <button class="comm-tab" data-commtab="status" onclick="commTab('status')"><span class="num">3</span>Statuser</button>
+    <button class="comm-tab on" data-commtab="comment" onclick="commTab('comment')"><span class="num">4</span>Kommentar: opprett, send, lukk</button>
+  </div>
+
+  <div class="comm-intro">
+    <p>En kommentar i Box starter når du markerer et punkt på en tegning, et dokument eller en BIM-modell, og fyller ut kommentarskjemaet. Den lever videre gjennom hele behandlingen, med full sporbarhet i aktivitetsloggen.</p>
+  </div>
+
+  <!-- Stepper: 4 klikkbare faner som doblerer som progress-indikator -->
+  <div class="cl-stepper" id="clStepper">
+    <button type="button" class="cl-step-tab active" data-step="1" onclick="clGoTo(1)">
+      <span class="cl-step-num">1</span><span class="cl-step-title">Opprett</span>
+    </button>
+    <button type="button" class="cl-step-tab" data-step="2" onclick="clGoTo(2)">
+      <span class="cl-step-num">2</span><span class="cl-step-title">Send</span>
+    </button>
+    <button type="button" class="cl-step-tab" data-step="3" onclick="clGoTo(3)">
+      <span class="cl-step-num">3</span><span class="cl-step-title">Dialog</span>
+    </button>
+    <button type="button" class="cl-step-tab" data-step="4" onclick="clGoTo(4)">
+      <span class="cl-step-num">4</span><span class="cl-step-title">Lukk</span>
+    </button>
+  </div>
+
+  <!-- Beskrivelse av valgt steg -->
+  <div class="cl-step-desc" id="clStepDesc">
+    <strong>Opprett kommentar:</strong> Velg fil (tegning, PDF eller BIM-modell) og marker med sky, pil, tekst eller måling. Fyll ut kommentarskjema med type, kommunikasjonsflyt, tittel, tidsfrist og beskrivelse. Kommentaren knyttes permanent til filen og posisjonen.
+  </div>
+
+  <!-- Animert stage: 3 grupper + puck + status -->
+  <div class="cl-stage">
+    <div class="cl-file">📄 D-Plan 01 · Kommentar #71</div>
+    <div class="cl-flow" id="clFlow">
+      <div class="cl-group active" data-group="rie">
+        <span class="cl-group-icon">⚡</span>
+        <span class="cl-group-name">RiE</span>
+      </div>
+      <div class="cl-group" data-group="ark">
+        <span class="cl-group-icon">🏛️</span>
+        <span class="cl-group-name">ARK</span>
+      </div>
+      <div class="cl-group" data-group="pl">
+        <span class="cl-group-icon">📐</span>
+        <span class="cl-group-name">Prosj.leder</span>
+      </div>
+      <div class="cl-puck" id="clPuck">💬</div>
+    </div>
+    <div class="cl-status">
+      <span class="cl-status-label">Status:</span>
+      <span class="cl-status-badge cl-st-ny" id="clStatusBadge">Ny</span>
+    </div>
+  </div>
+
+  <div class="comm-log-example">
+    <div class="comm-log-header">
+      <div class="comm-log-icon">📄</div>
+      <div>
+        <div class="comm-log-title">Eksempel: Aktivitetslogg for kommentar</div>
+        <div class="comm-log-sub">Kommentar #71 - «Kollisjon mellom kabelbroer og ventilasjonskanal» på plantegning D-Plan 01</div>
+      </div>
+    </div>
+    <div class="comm-log-entries">
+      <div class="comm-log-entry" data-show-from="1">
+        <div class="comm-log-avatar" style="background:#10b981">OV</div>
+        <div class="comm-log-content">
+          <div class="comm-log-name">Ole Ventansen <span class="comm-log-date">10. des. 2024</span></div>
+          <div class="comm-log-action">Opprettet kommentar i flyt: Prosjekteringsgruppe</div>
+          <div class="comm-log-action">Ansvarlig gruppe satt til: RiE (Rådgivende ingeniør elektro)</div>
+          <div class="comm-log-action">Meldingsmottakere lagt til: Ole Ventansen, Tor Ampere</div>
+          <div class="comm-log-action">Status: <span class="comm-log-status" style="background:#f59e0b">Ny</span></div>
+        </div>
+      </div>
+      <div class="comm-log-entry" data-show-from="2">
+        <div class="comm-log-avatar" style="background:#f59e0b">TA</div>
+        <div class="comm-log-content">
+          <div class="comm-log-name">Tor Ampere <span class="comm-log-date">12. des. 2024</span></div>
+          <div class="comm-log-action">Ny melding: «Ser kollisjonen. Kan flytte kabelbroene 200mm nord, men trenger bekreftelse fra ARK på takhøyde.»</div>
+          <div class="comm-log-action">Vedlegg lagt til: <em>Kabelbroer_alternativ_trasé.pdf</em></div>
+          <div class="comm-log-action">Ansvarlig gruppe endret til: ARK (Arkitekt)</div>
+          <div class="comm-log-action">Status oppdatert fra <span class="comm-log-status" style="background:#f59e0b">Ny</span> til <span class="comm-log-status" style="background:#3b82f6">Under behandling</span></div>
+        </div>
+      </div>
+      <div class="comm-log-entry" data-show-from="3">
+        <div class="comm-log-avatar" style="background:#ef4444">KF</div>
+        <div class="comm-log-content">
+          <div class="comm-log-name">Kari Fasade <span class="comm-log-date">13. des. 2024</span></div>
+          <div class="comm-log-action">Ny melding: «Takhøyde OK. Fri høyde 2400mm opprettholdes med ny trasé.»</div>
+          <div class="comm-log-action">Ansvarlig gruppe endret til: Prosjekteringsleder</div>
+          <div class="comm-log-action">Status oppdatert fra <span class="comm-log-status" style="background:#3b82f6">Under behandling</span> til <span class="comm-log-status" style="background:#8b5cf6">Besvart</span></div>
+        </div>
+      </div>
+      <div class="comm-log-entry" data-show-from="4">
+        <div class="comm-log-avatar" style="background:#ec4899">IP</div>
+        <div class="comm-log-content">
+          <div class="comm-log-name">Ingrid Plansson <span class="comm-log-date">15. des. 2024</span></div>
+          <div class="comm-log-action">Ny melding: «Løsning godkjent. RiE oppdaterer modell innen rev. 3.»</div>
+          <div class="comm-log-action">Status oppdatert fra <span class="comm-log-status" style="background:#8b5cf6">Besvart</span> til <span class="comm-log-status" style="background:#8DC63F">Lukket</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kontroller -->
+  <div class="cl-controls">
+    <button type="button" class="ctrl-btn" id="clPrevBtn" onclick="clStep(-1)" disabled>← Forrige</button>
+    <button type="button" class="ctrl-btn primary" id="clNextBtn" onclick="clStep(1)">Neste →</button>
+  </div>
+</div>
+
+</div>
+
+<!-- Box Track: Mappestruktur og filhåndtering -->
+<div class="box-track" id="boxTrackFiles">
+<button class="back-btn" onclick="backToBoxSelector()">← Box</button>
+
+<div class="page-nav" id="filesNav">
+  <button class="page-btn active" onclick="showFilesPage(1)" id="fpb1"><span class="pnum">1</span> Mappestruktur og metadata</button>
+  <button class="page-btn" onclick="showFilesPage(2)" id="fpb2"><span class="pnum">2</span> Filer og versjonshåndtering</button>
+</div>
+
+<button class="fs-btn" onclick="toggleFS()" id="fsBtnFiles" style="opacity:0;pointer-events:none">⛶ Fullskjerm</button>
+
+<!-- FILES PAGE 1: Mappestruktur og metadata -->
+<div class="page visible" id="filesPage1">
+  <header>
+    <h1>Mappestruktur og metadata</h1>
+    <p>Få mer ut av Box: hold mappene flate, og la metadata gjøre jobben med å finne filer.</p>
+  </header>
+
+  <div class="files-tabs">
+    <button class="hub-tab on" id="ftStruktur" onclick="setFilesTab('struktur')">Mappestruktur</button>
+    <button class="hub-tab" id="ftNavn" onclick="setFilesTab('navn')">Navngiving og metadata</button>
+    <button class="hub-tab" id="ftPraksis" onclick="setFilesTab('praksis')">Filtrering i praksis</button>
+  </div>
+
+  <div class="fl-wrap">
+
+    <div class="files-tabview on" id="ftvStruktur">
+
+    <!-- Mindset: flat struktur + metadata -->
+    <section class="fl-section">
+      <p class="fl-lead">Mange bygger en tung mappestruktur for å organisere filer. I Box holder du i stedet strukturen <b>så flat som mulig</b> og lar metadata styre filtrering, sortering og navigering.</p>
+      <div class="fl-cards">
+        <div class="fl-card old">
+          <h3><span class="fl-badge">Før</span> Tung mappestruktur</h3>
+          <p>Mappe i mappe i mappe. Du må vite nøyaktig hvor en fil ligger for å finne den, og samme fil havner gjerne flere steder.</p>
+        </div>
+        <div class="fl-card box">
+          <h3><span class="fl-badge">I Box</span> Flat struktur + metadata</h3>
+          <p>Få mapper. Hvert felt i filnavnet blir metadata du filtrerer og sorterer på. Du finner filer ved å søke, ikke ved å lete.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mapper du faktisk trenger -->
+    <section class="fl-section">
+      <h2 class="fl-h2">Mapper du faktisk trenger</h2>
+      <p class="fl-lead">To ting avgjør om en mappe hører hjemme i prosjektet:</p>
+      <div class="fl-need">
+        <div class="fl-need-item">
+          <h3><span class="fl-ic">🔑</span> Rettigheter</h3>
+          <p>Rettigheter styres gjennom brukergruppene, de samme i alle Dalux-moduler. Du gir hver gruppe tilgang til mappene: hvem som får lese, og hvem som får laste opp og redigere. Ofte går fagene igjen på både mappe- og gruppenivå, men ikke alltid.</p>
+        </div>
+        <div class="fl-need-item">
+          <h3><span class="fl-ic">🏷️</span> Maler for navngiving</h3>
+          <p>Hver mappe kan ha sin egen navnemal. Da fyller Box ut metadata automatisk når du laster opp, riktig for akkurat det faget. Hold deg til én regel per mappe.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Unngå fasemapper -->
+    <section class="fl-section">
+      <div class="fl-callout">
+        <div class="fl-callout-h"><span>⚠️</span> Unngå fasemapper</div>
+        Lager du en mappe per fase, dupliserer du filer, og det blir uklart hva som er nyest. Bruk <b>versjonssett</b> i stedet. Mer om det på Side 2: Filer og versjonshåndtering.
+      </div>
+    </section>
+
+    </div><!-- /ftvStruktur -->
+
+    <div class="files-tabview" id="ftvNavn">
+
+    <!-- Navngiving + Animasjon 1: filnavn-splitt -->
+    <section class="fl-section">
+      <h2 class="fl-h2">Navngiving trenger ikke være komplisert</h2>
+      <p class="fl-lead">Navnemalen deler filnavnet i metadata ved opplasting. Et avgrensningstegn skiller hvert felt. Bindestrek og understrek er vanligst, mellomrom fungerer til tider, og egentlig kan de fleste tegn brukes så lenge malen er satt opp for det. Velg så enkelt eller detaljert du vil.</p>
+
+      <div class="fls-toggle">
+        <button class="fls-tg on" id="flsTgEnkel" onclick="flsSetExample('enkel')">Enkel</button>
+        <button class="fls-tg" id="flsTgDet" onclick="flsSetExample('detaljert')">Detaljert</button>
+      </div>
+
+      <div class="fls-stage">
+        <div class="fls-segtoggle">
+          <div class="fls-pilltg">
+            <button id="flsStName" onclick="flsSetSplit(false)">Tegningsnavn</button>
+            <button id="flsStSplit" class="on" onclick="flsSetSplit(true)">Inndelt</button>
+          </div>
+        </div>
+        <div class="fls-fnrow"><div class="fls-fnpill" id="flsPill"></div></div>
+        <div class="fls-cols" id="flsCols"></div>
+        <div class="fls-unique" id="flsUnique"></div>
+      </div>
+
+      <div class="fls-tables" id="flsTables">
+        <div class="fls-ref"><h3>Fag (bokstav)</h3><table><tbody id="flsTFag">
+          <tr data-k="A"><td class="k">A</td><td>Arkitekt</td></tr>
+          <tr data-k="B"><td class="k">B</td><td>RIB</td></tr>
+          <tr data-k="C"><td class="k">C</td><td>VVS</td></tr>
+          <tr data-k="D"><td class="k">D</td><td>Elektro</td></tr>
+          <tr data-k="G"><td class="k">G</td><td>Utendørs</td></tr>
+          <tr data-k="H"><td class="k">H</td><td>RIBrann</td></tr>
+        </tbody></table><div class="cap">+ E, I, J, K ...</div></div>
+
+        <div class="fls-ref"><h3>Etasje</h3><table><tbody id="flsTEtasje">
+          <tr data-k="U00"><td class="k">U00</td><td>Underetasje</td></tr>
+          <tr data-k="01"><td class="k">01</td><td>Plan 1. etasje</td></tr>
+          <tr data-k="02"><td class="k">02</td><td>Plan 2. etasje</td></tr>
+          <tr data-k="T01"><td class="k">T01</td><td>Takplan 1</td></tr>
+          <tr data-k="T02"><td class="k">T02</td><td>Takplan 2</td></tr>
+        </tbody></table></div>
+
+        <div class="fls-ref"><h3>Type tegning</h3><table><tbody id="flsTType">
+          <tr data-k="10"><td class="k">10</td><td>Utendørs</td></tr>
+          <tr data-k="20"><td class="k">20</td><td>Plantegning</td></tr>
+          <tr data-k="30"><td class="k">30</td><td>Komplettering</td></tr>
+          <tr data-k="40"><td class="k">40</td><td>Snitt, fasade</td></tr>
+          <tr data-k="50"><td class="k">50</td><td>Detaljer</td></tr>
+          <tr data-k="70"><td class="k">70</td><td>Prinsipp</td></tr>
+        </tbody></table></div>
+
+        <div class="fls-ref"><h3>Systemkode</h3><table><tbody id="flsTSys">
+          <tr data-k="200"><td class="k">200</td><td>ARK</td></tr>
+          <tr data-k="220"><td class="k">220</td><td>RIB</td></tr>
+          <tr data-k="300"><td class="k">300</td><td>RIV rør</td></tr>
+          <tr data-k="360"><td class="k">360</td><td>RIV vent</td></tr>
+          <tr data-k="400"><td class="k">400</td><td>RIE</td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
+
+    <!-- Standardfelter vs egne felter -->
+    <section class="fl-section">
+      <h2 class="fl-h2">Standardfelter og egne felter</h2>
+      <p class="fl-lead">Dalux har et sett standardfelter som går igjen i alle prosjekter. De fleste feltene vi nettopp splittet filnavnet i, er derimot metadata på filnivå som du selv har lagt til.</p>
+      <div class="fl-cards">
+        <div class="fl-card">
+          <h3><span class="fl-ic">🔒</span> Standardfelter (allerede i Dalux)</h3>
+          <p>Felt som Filnavn, Versjon, Tittel, Status, Firma og Nummer ligger i Dalux fra før, merket med et låsesymbol. Noen av dem er låst til bestemte deler av systemet og kan ikke brukes som metadata i Box.</p>
+        </div>
+        <div class="fl-card">
+          <h3><span class="fl-ic">✏️</span> Egne felter (du lager dem)</h3>
+          <p>Fag, etasje, type, systemkode og løpenummer er felt du legger til selv på filnivå. Det er disse navnemalen fyller ut automatisk når du laster opp.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hvordan navnemalen bygges (valgfri dybde) -->
+    <section class="fl-section">
+      <h2 class="fl-h2">Slik bygger du malen</h2>
+      <p class="fl-lead">For de som vil sette opp navngiving selv: i malen drar du inn feltene du vil ha, med en avgrenser mellom hver.</p>
+      <div class="fl-cards">
+        <div class="fl-card">
+          <h3><span class="fl-ic">🛠️</span> Felt og avgrensere</h3>
+          <p>Hvert felt henter du fra metadatalista du har laget. Et felt kan være tekst, dato eller et valg fra en liste. Du kan også styre om det bare skal være tall, og hvor langt det skal være.</p>
+        </div>
+        <div class="fl-card">
+          <h3><span class="fl-ic">🧪</span> Test før du lagrer</h3>
+          <p>Du trenger ikke bruke alle mulighetene. Vil du prøve, kan du teste hvordan et filnavn blir før du tar malen i bruk.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nummer-feltet -->
+    <section class="fl-section">
+      <h2 class="fl-h2">«Nummer» kobler filene automatisk</h2>
+      <div class="fl-cards">
+        <div class="fl-card">
+          <h3><span class="fl-ic">🔗</span> Ett av standardfeltene</h3>
+          <p>«Nummer» er ett av standardfeltene, ikke noe du lager selv. Det er tekststrengen Dalux matcher på for automatiske hyperlenker. Klikker du et nummer i en tegning, hopper du rett til riktig fil.</p>
+        </div>
+        <div class="fl-card">
+          <h3><span class="fl-ic">⚠️</span> Må være unikt</h3>
+          <p>Er nummeret ikke unikt, kobler Dalux til første treff, og du havner på feil fil. Lenkene virker også fra Lokasjoner og fra felt-appen, og bare til filer du har tilgang til.</p>
+        </div>
+      </div>
+    </section>
+
+    </div><!-- /ftvNavn -->
+
+    <div class="files-tabview" id="ftvPraksis">
+
+    <!-- Animasjon 2: Dalux fil-liste (gevinsten) -->
+    <section class="fl-section">
+      <h2 class="fl-h2">Slik bruker du det i Box</h2>
+      <p class="fl-lead">Når filene har metadata, filtrerer og søker du i stedet for å lete i mapper. Her spiller det ingen rolle om metadataen kom fra en navnemal eller ble fylt inn for hånd, så lenge den er der.</p>
+
+      <div class="fll-panel">
+        <div class="fll-filterbar">
+          <div class="fll-frow"><span class="fll-flabel">Fag</span><div id="fllFagChips"></div></div>
+          <div class="fll-frow"><span class="fll-flabel">Etasje</span><div id="fllEtChips"></div></div>
+        </div>
+        <div class="fll-count" id="fllCount"></div>
+        <div class="fll-scroll">
+          <table>
+            <thead><tr><th>Nummer</th><th>Fag</th><th>Type</th><th>Etasje</th><th>Beskrivelse</th></tr></thead>
+            <tbody id="fllRows"></tbody>
+          </table>
+        </div>
+      </div>
+      <p class="fll-foot">Samme metadata driver <b>hyperlenkene</b>: klikk et nummer i en tegning, og du hopper rett til riktig fil.</p>
+    </section>
+
+    </div><!-- /ftvPraksis -->
+
+  </div>
+</div>
+
+<!-- FILES PAGE 2: Filer og versjonshåndtering (kommer) -->
+<div class="page files-placeholder" id="filesPage2">
+  <div class="files-soon-card">
+    <div class="files-soon-icon">🗂️</div>
+    <h1>Filer og versjonshåndtering</h1>
+    <p class="files-soon-lead">Denne delen er ikke ferdig ennå.</p>
+    <p class="files-soon-desc">Når den er klar vil den dekke versjonssett som erstatter fasemapper, sammenligning mot tidligere versjoner, Microsoft 365, og publisering fra Filer til Utgitte filer.</p>
+    <div class="files-soon-list">
+      <div class="files-soon-item"><span class="files-soon-bullet">•</span>Versjonssett i stedet for fasemapper</div>
+      <div class="files-soon-item"><span class="files-soon-bullet">•</span>Sammenligning mot tidligere versjoner</div>
+      <div class="files-soon-item"><span class="files-soon-bullet">•</span>Publisering til Utgitte filer</div>
+    </div>
+    <button class="ctrl-btn" onclick="showFilesPage(1)" style="margin-top:8px">← Tilbake til Side 1</button>
+  </div>
+</div>
+</div>
+
+<!-- Box Track: ISO 19650 -->
+<div class="box-track" id="boxTrackIso">
+<button class="back-btn" onclick="backToBoxSelector()">← Box</button>
+
+<div class="page-nav" id="boxNav">
+  <button class="page-btn active" onclick="showBoxPage(1)" id="bpb1"><span class="pnum">1</span> ISO 19650</button>
+  <button class="page-btn" onclick="showBoxPage(2)" id="bpb2"><span class="pnum">2</span> Box i praksis</button>
+  <button class="page-btn" onclick="showBoxPage(3)" id="bpb3"><span class="pnum">3</span> Dokumentflyt</button>
+</div>
+
+<button class="fs-btn" onclick="toggleFS()" id="fsBtnBox" style="opacity:0;pointer-events:none">⛶ Fullskjerm</button>
+
+<!-- BOX PAGE 1: ISO 19650 → CDE -->
+<div class="page visible" id="boxPage1">
+  <div class="box-p1-top">
+  <header>
+    <h1>ISO 19650</h1>
+    <p id="boxP1Subtitle">Internasjonal standard for informasjonshåndtering i bygge- og anleggsprosjekter</p>
+  </header>
+
+  <div class="iso-intro" id="boxP1Intro">
+    <p>ISO 19650 handler om å sørge for at riktig informasjon er tilgjengelig for riktige personer til rett tid. Standarden setter rammene for hvordan dokumenter og modeller skal organiseres, navngis, deles og godkjennes gjennom hele prosjektets levetid.</p>
+    <p>Kjernen i standarden er et <strong>Common Data Environment (CDE)</strong>, ett felles sted der all prosjektinformasjon lever, med tydelige statusområder som viser hvor hvert dokument befinner seg i prosessen.</p>
+  </div>
+  </div>
+
+  <div class="iso-tabs">
+    <button class="hub-tab on" id="tIso" onclick="setIsoView('iso')">Statusområder</button>
+    <button class="hub-tab" id="tCde" onclick="setIsoView('cde')">CDE i Dalux</button>
+  </div>
+  <div class="iso-caption" id="isoCaption">Slik mapper ISO 19650 statusområdene til Dalux Box sine filområder</div>
+
+  <!-- VIEW: Statusområder (horizontal pipeline) -->
+  <div class="iso-view-container" id="isoViewList">
+    <div class="cde-pipeline">
+      <div class="cde-zone" data-zone="wip">
+        <div class="cde-zone-header wip">
+          <div class="cde-zone-num">S0</div>
+          <div class="cde-zone-title">Arbeid under utvikling</div>
+        </div>
+        <div class="cde-zone-body">
+          <div class="cde-dalux-name wip">→ Filer i Dalux</div>
+          <div class="cde-zone-desc">Arbeid pågår. Innhold er under utvikling og ikke klart for deling. Kun synlig for de som har tilgang til mappen.</div>
+          <div class="cde-tags"><span class="cde-tag wip">Utkast</span><span class="cde-tag wip">Under arbeid</span><span class="cde-tag wip">Internt</span></div>
+        </div>
+      </div>
+      <div class="cde-arrow-sep">
+        <svg viewBox="0 0 32 48" width="24" height="36"><polygon points="4,8 20,24 4,40" fill="var(--border)" opacity=".6"/></svg>
+      </div>
+      <div class="cde-zone" data-zone="shared">
+        <div class="cde-zone-header shared">
+          <div class="cde-zone-num">S1-S2</div>
+          <div class="cde-zone-title">Deling og koordinering</div>
+        </div>
+        <div class="cde-zone-body">
+          <div class="cde-dalux-name shared">→ Delte filer i Dalux</div>
+          <div class="cde-zone-desc">Delt med prosjektteamet for koordinering og tverrfaglig kontroll. Dokumentet er tilgjengelig for kommentering og gjennomgang, men ikke offisielt godkjent.</div>
+          <div class="cde-tags"><span class="cde-tag shared">Til koordinering</span><span class="cde-tag shared">Tverrfaglig</span><span class="cde-tag shared">Gjennomgang</span></div>
+        </div>
+      </div>
+      <div class="cde-arrow-sep">
+        <svg viewBox="0 0 32 48" width="24" height="36"><polygon points="4,8 20,24 4,40" fill="var(--border)" opacity=".6"/></svg>
+      </div>
+      <div class="cde-zone" data-zone="published">
+        <div class="cde-zone-header published">
+          <div class="cde-zone-num">S3</div>
+          <div class="cde-zone-title">Godkjenning og publisering</div>
+        </div>
+        <div class="cde-zone-body">
+          <div class="cde-dalux-name published">→ Utgitte filer i Dalux</div>
+          <div class="cde-zone-desc">Godkjent informasjon. Dokumentet er kontrollert, godkjent og utgitt som gjeldende versjon for alle relevante parter.</div>
+          <div class="cde-tags"><span class="cde-tag published">Godkjent</span><span class="cde-tag published">Gjeldende</span><span class="cde-tag published">Offisiell</span></div>
+        </div>
+      </div>
+      <div class="cde-arrow-sep">
+        <svg viewBox="0 0 32 48" width="24" height="36"><polygon points="4,8 20,24 4,40" fill="var(--border)" opacity=".6"/></svg>
+      </div>
+      <div class="cde-zone cde-zone-external" data-zone="archived">
+        <div class="cde-zone-header archived">
+          <div class="cde-zone-num">S4</div>
+          <div class="cde-zone-title">Arkivering</div>
+        </div>
+        <div class="cde-zone-body">
+          <div class="cde-external-badge">Utenfor Box</div>
+          <div class="cde-zone-desc">Arkivering og overlevering kan også håndteres utenfor Box-modulen. <strong>Dalux Handover</strong>, som er en del av Build-plattformen, håndterer strukturert overlevering til drift. For forvaltning og vedlikehold tilbyr Dalux en egen <strong>FM-plattform</strong>.</div>
+          <div class="cde-tags"><span class="cde-tag archived">Dalux Handover</span><span class="cde-tag archived">Dalux FM</span><span class="cde-tag archived">Overlevering</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="cde-info">
+      <div class="cde-info-title">Hvorfor CDE?</div>
+      <p>Hele poenget med et Common Data Environment er å ha én felles kilde til sannhet. Alle parter vet hvor de finner gjeldende informasjon, og alle dokumenter har en tydelig status som viser hvor langt de har kommet i prosessen.</p>
+      <p>ISO 19650 gir rammeverket, men i praksis må det tilpasses hvert prosjekt. Det er her Dalux Box kommer inn.</p>
+    </div>
+  </div>
+
+  <!-- VIEW: CDE i Dalux (ISO krav → Dalux funksjoner) -->
+  <div class="iso-view-container" id="isoViewCde" style="display:none">
+    <div class="cde-view-tabs">
+      <button class="hub-tab on" id="tReqs" onclick="setCdeMode('reqs')">ISO-krav</button>
+      <button class="hub-tab" id="tDalux" onclick="setCdeMode('dalux')">Vis i Dalux</button>
+    </div>
+    <div class="cde-stage" id="cdeStage">
+      <svg class="cde-hub-svg" id="cdeHubSvg"></svg>
+      <div class="cde-hub-center" id="cdeHubCenter">
+        <div class="cde-hub-label">ISO 19650 i</div>
+        <div class="cde-hub-name">Dalux Box Pro</div>
+      </div>
+      <div class="cde-card" id="cdeCard0">
+        <div class="cde-card-req">
+          <div class="cde-card-num">1</div>
+          <div class="cde-card-req-title">Statusområder (S0-S3)</div>
+        </div>
+        <div class="cde-card-dalux">
+          <div class="cde-feat-icon">📂</div>
+          <div class="cde-feat-content">
+            <div class="cde-feat-title">Filområder</div>
+            <div class="cde-feat-desc">Tre filområder (Filer, Delte filer og Utgitte filer) mapper direkte til ISO 19650 sine statusområder S0, S1-S2 og S3.</div>
+          </div>
+        </div>
+      </div>
+      <div class="cde-card" id="cdeCard1">
+        <div class="cde-card-req">
+          <div class="cde-card-num">2</div>
+          <div class="cde-card-req-title">Egnethetskoder (Suitability)</div>
+        </div>
+        <div class="cde-card-dalux">
+          <div class="cde-feat-icon">🏷️</div>
+          <div class="cde-feat-content">
+            <div class="cde-feat-title">Egendefinerte statuser</div>
+            <div class="cde-feat-desc">Opprett statuser som "Til koordinering", "Til bygging" eller "Til godkjenning" for å merke dokumenters bruksområde.</div>
+          </div>
+        </div>
+      </div>
+      <div class="cde-card" id="cdeCard2">
+        <div class="cde-card-req">
+          <div class="cde-card-num">3</div>
+          <div class="cde-card-req-title">Navnekonvensjon</div>
+        </div>
+        <div class="cde-card-dalux">
+          <div class="cde-feat-icon">📋</div>
+          <div class="cde-feat-content">
+            <div class="cde-feat-title">Navnekonvensjon og regler</div>
+            <div class="cde-feat-desc">Definer og håndhev en avtalt navnekonvensjon. Standarden krever konsistens, men overlater feltstrukturen til prosjektet.</div>
+          </div>
+        </div>
+      </div>
+      <div class="cde-card" id="cdeCard3">
+        <div class="cde-card-req">
+          <div class="cde-card-num">4</div>
+          <div class="cde-card-req-title">Informasjonsmetadata</div>
+        </div>
+        <div class="cde-card-dalux">
+          <div class="cde-feat-icon">🏷️</div>
+          <div class="cde-feat-content">
+            <div class="cde-feat-title">Metadata-felter</div>
+            <div class="cde-feat-desc">Legg til egendefinerte felter som fagkode, byggkode, etasjekode og tegningstype for enkel filtrering og søk på tvers av prosjektet.</div>
+          </div>
+        </div>
+      </div>
+      <div class="cde-card" id="cdeCard4">
+        <div class="cde-card-req">
+          <div class="cde-card-num">5</div>
+          <div class="cde-card-req-title">Tilgangskontroll</div>
+        </div>
+        <div class="cde-card-dalux">
+          <div class="cde-feat-icon">🔒</div>
+          <div class="cde-feat-content">
+            <div class="cde-feat-title">Tilgangsstyring per område</div>
+            <div class="cde-feat-desc">Styr hvem som kan se, laste opp og redigere i hvert filområde. Riktig informasjon til riktige parter.</div>
+          </div>
+        </div>
+      </div>
+      <div class="cde-card" id="cdeCard5">
+        <div class="cde-card-req">
+          <div class="cde-card-num">6</div>
+          <div class="cde-card-req-title">Informasjonsleveranse (TIDP/MIDP)</div>
+        </div>
+        <div class="cde-card-dalux">
+          <div class="cde-feat-icon">📬</div>
+          <div class="cde-feat-content">
+            <div class="cde-feat-title">Innsendinger</div>
+            <div class="cde-feat-desc">Planlegg og spor filleveranser med ansvarlige, frister, gjennomgangsflyt og godkjenning.</div>
+          </div>
+        </div>
+      </div>
+      <div class="cde-card" id="cdeCard6">
+        <div class="cde-card-req">
+          <div class="cde-card-num">7</div>
+          <div class="cde-card-req-title">Godkjenningsflyt</div>
+        </div>
+        <div class="cde-card-dalux">
+          <div class="cde-feat-icon">✅</div>
+          <div class="cde-feat-content">
+            <div class="cde-feat-title">Gjennomgang og godkjenning</div>
+            <div class="cde-feat-desc">Formalisert flyt for gjennomgang og godkjenning med definerte roller og sporbare beslutninger.</div>
+          </div>
+        </div>
+      </div>
+      <div class="cde-card" id="cdeCard7">
+        <div class="cde-card-req">
+          <div class="cde-card-num">8</div>
+          <div class="cde-card-req-title">Sporbarhet (Audit trail)</div>
+        </div>
+        <div class="cde-card-dalux">
+          <div class="cde-feat-icon">📑</div>
+          <div class="cde-feat-content">
+            <div class="cde-feat-title">Versjonshistorikk og sammenligning</div>
+            <div class="cde-feat-desc">Alle filversjoner arkiveres automatisk. Sammenlign versjoner side om side for å se hva som har endret seg.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOX PAGE 2: Dalux Box i praksis -->
+<div class="page" id="boxPage2">
+  <header>
+    <h1>Dalux Box i praksis</h1>
+    <p>Ikke alle prosjekter trenger full ISO 19650. Tilpass bruken av Dalux Box til prosjektets behov.</p>
+  </header>
+
+  <div class="box-levels">
+    <div class="box-level" id="boxLevel1">
+      <div class="box-level-header">
+        <div class="box-level-badge easy">Nivå 1</div>
+        <h3>Enkel dokumenthåndtering</h3>
+      </div>
+      <div class="box-level-body">
+        <p>Bruk Box som ren fillagring med oversiktlig mappestruktur. Egner seg for prosjekter som trenger orden uten formell prosess.</p>
+        <div class="box-features">
+          <div class="box-feat"><span class="bf-icon">📁</span><span>Mappestruktur per fag/disiplin</span></div>
+          <div class="box-feat"><span class="bf-icon">🔄</span><span>Automatisk versjonering ved opplasting</span></div>
+          <div class="box-feat"><span class="bf-icon">📝</span><span>Aktivering av Microsoft 365</span></div>
+          <div class="box-feat"><span class="bf-icon">👁️</span><span>Tilgangsstyring per mappe</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box-level" id="boxLevel2">
+      <div class="box-level-header">
+        <div class="box-level-badge medium">Nivå 2</div>
+        <h3>Strukturert med sporbarhet</h3>
+      </div>
+      <div class="box-level-body">
+        <p>Innfør filområder, metadata og navnekonvensjoner for bedre sporbarhet og struktur. Du kan filtrere og søke i dokumenter på tvers av prosjektet.</p>
+        <div class="box-features">
+          <div class="box-feat"><span class="bf-icon">📂</span><span>Mapper = statusområder (Filer → Utgitte filer)</span></div>
+          <div class="box-feat"><span class="bf-icon">🔒</span><span>Tilgangsstyring per statusområde</span></div>
+          <div class="box-feat"><span class="bf-icon">📋</span><span>Navnekonvensjon for filer</span></div>
+          <div class="box-feat"><span class="bf-icon">🏷️</span><span>Metadata-felter (status, revisjon, fag)</span></div>
+          <div class="box-feat"><span class="bf-icon">🔗</span><span>Automatiske hyperlinker mellom tegninger basert på navnekonvensjon</span></div>
+          <div class="box-feat"><span class="bf-icon">🏷️</span><span>Egendefinerte statuser for dokumenter</span></div>
+          <div class="box-feat"><span class="bf-icon">📑</span><span>Sammenligning av tegninger, modeller og dokumenter mot tidligere versjoner</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box-level" id="boxLevel3">
+      <div class="box-level-header">
+        <div class="box-level-badge full">Nivå 3</div>
+        <h3>ISO 19650-tilpasset CDE</h3>
+      </div>
+      <div class="box-level-body">
+        <p>Komplett oppsett med alle tre filområder, formalisert leveranse- og godkjenningsflyt, og full sporbarhet i tråd med ISO 19650.</p>
+        <div class="box-features">
+          <div class="box-feat"><span class="bf-icon">🗂️</span><span>Tre filområder (Filer → Delte filer → Utgitte filer)</span></div>
+          <div class="box-feat"><span class="bf-icon">📬</span><span>Innsendinger med planlagte leveranser, frister og ansvarlige</span></div>
+          <div class="box-feat"><span class="bf-icon">✅</span><span>Formalisert gjennomgangs- og godkjenningsflyt</span></div>
+          <div class="box-feat"><span class="bf-icon">📐</span><span>Avtalt navnekonvensjon for hele prosjektet</span></div>
+          <div class="box-feat"><span class="bf-icon">🔒</span><span>Tilgangsstyring per statusområde</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOX PAGE 3: Dokumentflyt -->
+<div class="page" id="boxPage3">
+  <header>
+    <h1>Slik flyter et dokument gjennom CDE</h1>
+    <p>Følg et dokument fra utkast til godkjent versjon</p>
+  </header>
+
+  <div class="doc-flow-container">
+    <div class="doc-flow-pipeline">
+      <div class="doc-pipe-zone" id="dfWip"><div class="doc-pipe-label wip">Filer</div></div>
+      <div class="doc-pipe-sep"></div>
+      <div class="doc-pipe-zone" id="dfShared"><div class="doc-pipe-label shared">Delte filer</div></div>
+      <div class="doc-pipe-sep"></div>
+      <div class="doc-pipe-zone" id="dfPublished"><div class="doc-pipe-label published">Utgitte filer</div></div>
+    </div>
+
+    <div class="doc-timeline" id="docTimeline"></div>
+    <div style="height:80px;"></div>
+  </div>
+
+  <div class="controls visible" id="docControls">
+    <button class="ctrl-btn" id="docBtnPrev" onclick="docPrev()" disabled>← Forrige</button>
+    <div class="lc-progress" id="docProgress"></div>
+    <button class="ctrl-btn primary" id="docBtnNext" onclick="docNext()">Start ▶</button>
+  </div>
+</div>
+
+</div> <!-- end boxTrackIso -->
+</div> <!-- end modBox -->
+
+<!-- ============ TRACK: BRUKERGRUPPER (Felles begreper) ============ -->
+<div class="common-track" id="trackBrukergrupper">
+  <button class="back-btn" onclick="backToSplash()">← Forside</button>
+
+  <div class="page-nav" id="brukergrupperNav">
+    <button class="page-btn active" onclick="showBrukergrupperPage(1)" id="bgpb1"><span class="pnum">1</span> Hva er en brukergruppe?</button>
+    <button class="page-btn" onclick="showBrukergrupperPage(2)" id="bgpb2"><span class="pnum">2</span> Standardgruppene</button>
+    <button class="page-btn" onclick="showBrukergrupperPage(3)" id="bgpb3"><span class="pnum">3</span> Slik bygger du gode grupper</button>
+  </div>
+
+  <button class="fs-btn" onclick="toggleFS()" id="fsBtnBrukergrupper" style="opacity:0;pointer-events:none">⛶ Fullskjerm</button>
+
+  <!-- SIDE 1: Konsept -->
+  <div class="page visible" id="brukergrupperPage1">
+    <header>
+      <h1>Hva er en brukergruppe?</h1>
+      <p>Grunnstrukturen for rettigheter, samarbeid og sporbarhet i Dalux</p>
+    </header>
+
+    <div class="bg-intro">
+      <p class="bg-intro-quote">Brukergrupper styrer hvem som kan hva i Dalux</p>
+      <p>Du gir ikke rettigheter til personer direkte. Du lager grupper, gir gruppene rettigheter, og legger personene inn der de hører hjemme. En person kan være med i flere grupper, og får dermed ulike roller og rettigheter avhengig av modul og arbeidsforløp.</p>
+    </div>
+
+    <div class="bg-scene-wrap">
+      <div class="bg-scene-stage" id="bgSceneStage">
+        <svg class="bg-scene-svg" id="bgSceneSvg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+
+      <div class="bg-scene-caption" id="bgSceneCaption">Et byggeprosjekt har mange personer. Hver med sin rolle og sitt firma.</div>
+
+      <div class="bg-scene-controls">
+        <button class="ctrl-btn" id="bgPrevBtn" onclick="bgStep(-1)" disabled>← Forrige</button>
+        <div class="bg-scene-dots">
+          <span class="bg-scene-dot active" data-step="1"></span>
+          <span class="bg-scene-dot" data-step="2"></span>
+          <span class="bg-scene-dot" data-step="3"></span>
+        </div>
+        <button class="ctrl-btn primary" id="bgNextBtn" onclick="bgStep(1)">Neste →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDE 2: Standardgruppene -->
+  <div class="page" id="brukergrupperPage2">
+    <header>
+      <h1>Standardgruppene i Dalux</h1>
+      <p>Gruppene som finnes når du oppretter et nytt prosjekt</p>
+    </header>
+
+    <div class="bg-section">
+      <div class="bg-section-title">Generelt</div>
+      <div class="bg-cards">
+        <div class="bg-card" style="max-width:480px">
+          <div class="bg-card-header">
+            <span class="bg-card-icon">🛠️</span>
+            <div>
+              <div class="bg-card-sub">Generell admin</div>
+              <div class="bg-card-title">Prosjektadministratorer</div>
+            </div>
+          </div>
+          <div class="bg-card-desc">Har full tilgang til alle prosjektets innstillinger og kan opprette brukergrupper, sette rettigheter og invitere brukere. De ser innholdet i Box, men har i utgangspunktet ingen lese- eller oppretter-rettigheter i Field, noe de kan gi seg selv siden de styrer rettighetene.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-section">
+      <div class="bg-section-title">Field</div>
+      <div class="bg-cards">
+        <div class="bg-card">
+          <div class="bg-card-header">
+            <span class="bg-card-icon">⚙️</span>
+            <div>
+              <div class="bg-card-sub">Field admin</div>
+              <div class="bg-card-title">Field-administratorer</div>
+            </div>
+          </div>
+          <div class="bg-card-desc">Administrerer Field-modulen. Setter opp arbeidspakker, arbeidsforløp og maler for oppgaver, sjekklister, testplaner osv. Kan flytte personer mellom Field-grupper, men kan ikke invitere nye til prosjektet.</div>
+        </div>
+        <div class="bg-card warning">
+          <span class="bg-warning-label">⚠ Viktig!</span>
+          <div class="bg-card-header">
+            <span class="bg-card-icon">📝</span>
+            <div>
+              <div class="bg-card-sub">Auto-rolle i alle workflows</div>
+              <div class="bg-card-title">Oppgave- og sjekklistekoordinator</div>
+            </div>
+          </div>
+          <div class="bg-card-desc">Du plasseres automatisk som oppretter i ALLE arbeidsforløp på prosjektet. Det overstyrer andre svarer-roller du måtte ha. Anbefales kun for de som faktisk skal koordinere alt. Har du andre roller i prosjektet, ikke vær med her.</div>
+        </div>
+        <div class="bg-card">
+          <div class="bg-card-header">
+            <span class="bg-card-icon">👁️</span>
+            <div>
+              <div class="bg-card-sub">Lesetilgang</div>
+              <div class="bg-card-title">Field-observatører</div>
+            </div>
+          </div>
+          <div class="bg-card-desc">Kan se det meste i Field, men ikke møter og mengder (med mindre de får egen tilgang via en egendefinert gruppe). Kan ikke se kladder eller motta varsler ved endringer.</div>
+        </div>
+        <div class="bg-card">
+          <div class="bg-card-header">
+            <span class="bg-card-icon">🦺</span>
+            <div>
+              <div class="bg-card-sub">HMS-ansvarlig</div>
+              <div class="bg-card-title">HMS-ledere</div>
+            </div>
+          </div>
+          <div class="bg-card-desc">Ansvarlig for HMS-funksjonene. Får automatisk HMS-arbeidsforløp i alle arbeidspakker der HMS er aktivert. Mottar alle HMS-observasjoner. Kan ikke redigere HMS-malene selv.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-section">
+      <div class="bg-section-title">Box</div>
+      <div class="bg-cards">
+        <div class="bg-card">
+          <div class="bg-card-header">
+            <span class="bg-card-icon">📂</span>
+            <div>
+              <div class="bg-card-sub">Box og Lokasjoner</div>
+              <div class="bg-card-title">Prosjekteringsleder</div>
+            </div>
+          </div>
+          <div class="bg-card-desc">Administrerer Box og Lokasjoner. Oppretter og styrer lokasjoner, bygninger og mappestruktur. Lager versjonsett, distribusjonslister, review packages og kommentarer. Kan håndtere filområder og fil-flyt, inkludert tvungen publisering og godkjenning.</div>
+        </div>
+        <div class="bg-card">
+          <div class="bg-card-header">
+            <span class="bg-card-icon">📬</span>
+            <div>
+              <div class="bg-card-sub">Innsendinger</div>
+              <div class="bg-card-title">Innsendingsansvarlig</div>
+            </div>
+          </div>
+          <div class="bg-card-desc">Tilgjengelig kun når innsendingsfunksjonen er aktivert i prosjektet. Har tilgang til alle innsendingsinnstillinger og administrerer prosjektets innsendinger og leveranser.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDE 3: God praksis -->
+  <div class="page" id="brukergrupperPage3">
+    <header>
+      <h1>Slik bygger du gode grupper</h1>
+      <p>Hvorfor flere små grupper gir bedre kontroll enn én stor</p>
+    </header>
+
+    <div class="bg-why">
+      <p>Det er fristende å lage få og store brukergrupper for å holde det enkelt. Men det gjør det vanskelig å gi presise rettigheter og målrette informasjon. Flere små grupper gir mer kontroll over hva folk kan opprette, redigere og se i hver modul.</p>
+    </div>
+
+    <div class="bg-principles">
+      <div class="bg-principle bg-step" data-bgstep="1">
+        <div class="bg-principle-num">Prinsipp 1</div>
+        <div class="bg-principle-title">Nummereringssystem</div>
+        <div class="bg-principle-text">Hver gruppe starter med et nummer. Det gir samme rekkefølge på alle prosjekter siden Dalux sorterer alfabetisk på gruppenavn.</div>
+      </div>
+      <div class="bg-principle bg-step" data-bgstep="1">
+        <div class="bg-principle-num">Prinsipp 2</div>
+        <div class="bg-principle-title">Én gruppe per firma/kontrakt</div>
+        <div class="bg-principle-text">Brukerne i én gruppe bør komme fra samme firma eller kontrakt. Da kan du enkelt målrette alle fra samme aktør i arbeidsforløp.</div>
+      </div>
+      <div class="bg-principle bg-step" data-bgstep="1">
+        <div class="bg-principle-num">Prinsipp 3</div>
+        <div class="bg-principle-title">Splitt per fag når relevant</div>
+        <div class="bg-principle-text">Hvis ett firma dekker flere fag, lag undergrupper med samme rot-nummer (40, 41, 42 osv.). Du kan da gi ulike rettigheter til hvert fag.</div>
+      </div>
+    </div>
+
+    <div class="bg-example bg-step" data-bgstep="2">
+      <div class="bg-example-header">
+        <span class="bg-example-icon">📋</span>
+        <span class="bg-example-title">Eksempel: Brukergrupper i et byggeprosjekt</span>
+      </div>
+      <div class="bg-example-list">
+        <div class="bg-example-row"><span class="bg-example-num">10</span><span>Byggherre</span></div>
+        <div class="bg-example-row"><span class="bg-example-num">20</span><span>Byggeledelse</span></div>
+        <div class="bg-example-row"><span class="bg-example-num">30</span><span>Lars Anlegg AS (totalentreprenør)</span></div>
+        <div class="bg-example-row"><span class="bg-example-num">40</span><span>Betongmiljø AS (RiB)</span></div>
+        <div class="bg-example-row sub"><span class="bg-example-num">41</span><span>Betongmiljø AS - Konstruksjon</span></div>
+        <div class="bg-example-row sub"><span class="bg-example-num">42</span><span>Betongmiljø AS - Geoteknikk</span></div>
+        <div class="bg-example-row"><span class="bg-example-num">50</span><span>Fasade &amp; Form AS (ARK)</span></div>
+        <div class="bg-example-row"><span class="bg-example-num">60</span><span>Strøm &amp; Lys AS (RiE)</span></div>
+        <div class="bg-example-row"><span class="bg-example-num">70</span><span>Klima AS (RiV)</span></div>
+        <div class="bg-example-row"><span class="bg-example-num">80</span><span>HMS-koordinator</span></div>
+      </div>
+    </div>
+
+    <div class="bg-split">
+      <div class="bg-split-header bg-step" data-bgstep="3">
+        <h3>Hva får du med å splitte?</h3>
+        <p>Se forskjellen mellom én bred gruppe og fagsplittede grupper</p>
+      </div>
+      <div class="bg-split-cols">
+        <div class="bg-split-col bad bg-step" data-bgstep="3">
+          <span class="bg-split-label">Mindre fleksibelt</span>
+          <div class="bg-split-title">40 - Betongmiljø AS (én stor)</div>
+          <div class="bg-split-text">Alle fagene i Betongmiljø får samme rettigheter. Geoteknikere får tilgang til konstruksjonsmodeller selv om de ikke trenger det. Varsler om konstruksjons-revisjoner går til geoteknikere som heller ikke trenger dem.</div>
+        </div>
+        <div class="bg-split-col good bg-step" data-bgstep="3">
+          <span class="bg-split-label">Mer presis</span>
+          <div class="bg-split-title">41 + 42 (fagsplittet)</div>
+          <div class="bg-split-text">Konstruksjon (41) og Geoteknikk (42) får ulike rettigheter og varsler. Du kan målrette en kommentar til kun riktig fag, og hver gruppe ser bare det som er relevant for dem. Begge er fortsatt under "40 Betongmiljø" for sortering.</div>
+        </div>
+      </div>
+    </div>
+    <div style="height:90px"></div>
+  </div>
+
+  <div class="controls" id="bg3Controls">
+    <button class="ctrl-btn" id="bg3Prev" onclick="bg3Prev()" disabled>← Forrige</button>
+    <div class="lc-progress" id="bg3Progress"></div>
+    <button class="ctrl-btn primary" id="bg3Next" onclick="bg3Next()">Neste →</button>
+  </div>
+</div>
+
+<button type="button" class="side-arrow left hidden" id="arrowLeft" onclick="navArrow(-1)" aria-label="Forrige side">◀</button>
+<button type="button" class="side-arrow right hidden" id="arrowRight" onclick="navArrow(1)" aria-label="Neste side">▶</button>
+
+<script src="js/field.js"></script>
+<script src="js/field-scenarios.js"></script>
+<script src="js/box-samhandling.js"></script>
+<script src="js/box-mappestruktur.js"></script>
+<script src="js/brukergrupper.js"></script>
+<script src="js/box-iso.js"></script>
+<script src="js/navigasjon.js"></script>
+</body>
+</html>
